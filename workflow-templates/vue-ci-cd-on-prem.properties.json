@@ -1,0 +1,13 @@
+{
+  "name": "Vue.js On-Premises CI/CD",
+  "description": "Per-environment template for building and deploying Vue.js applications on-premises using GitHub Actions",
+  "iconName": "vue",
+  "categories": [
+    "continuous-integration",
+    "deployment",
+    "JavaScript",
+    "TypeScript",
+    "Vue"
+  ],
+  "filePatterns": ["package.json$"]
+}

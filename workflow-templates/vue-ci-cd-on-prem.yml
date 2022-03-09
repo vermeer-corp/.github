@@ -1,0 +1,72 @@
+name: Development Build & Deploy
+
+on:
+  push:
+    branches:
+      - $default-branch
+  pull_request:
+    branches:
+      - $default-branch
+  workflow_dispatch:
+    branches:
+      - $default-branch
+
+env:
+  # Publish environment (one of: development, test, uat, production)
+  PUBLISH_ENVIRONMENT: development
+  # App name to publish to deployment servers
+  # Lower case
+  # Must not contain spaces - use hyphens to separate words
+  APP_NAME: app-name
+
+jobs:
+  build:
+    name: Build Vue.js
+    runs-on: ubuntu-latest
+    environment: $env.PUBLISH_ENVIRONMENT
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v2
+        with:
+          # Adjust if a different node version is needed
+          # See https://github.com/marketplace/actions/setup-node-js-environment for options
+          node-version: "16.x"
+          cache: "npm"
+      - name: Install dependencies
+        run: npm ci
+      - name: Run Linter
+        run: npm run lint
+      - name: Run Tests
+        run: npm run test:unit -- --passWithNoTests
+        if: ${{ success() }}
+      - name: Build
+        run: npm run build -- --mode $env.PUBLISH_ENVIRONMENT
+        # Update the env section below with any secrets that you need to pass to the build as environment variables
+        # env:
+        #   VUE_APP_GOOGLE_MAPS_KEY: ${{ secrets.VUE_APP_GOOGLE_MAPS_KEY }}
+        if: ${{ success() }}
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: publish-package
+          # Update the path below to match the path of the build output if needed.
+          # The Vue CLI will put the build output in the "dist" folder by default.
+          path: "dist"
+        if: ${{ (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && success() }}
+  # Repeat this section as needed for each deployment server
+  deploy:
+    needs:
+      - build
+    if: ${{ (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && success() }}
+    # Update the path here to match your repository name and location for the deploy-on-prem workflow template
+    uses: vermeer-corp/repository/.github/workflows/deploy-on-prem.yml@$default-branch
+    with:
+      deploy-environment: $env.PUBLISH_ENVIRONMENT
+      app-name: $env.APP_NAME
+      server-number: 1
+    secrets:
+      app-pool: ${{ secrets.DEV_IIS_APP_POOL }}
+      app-server: ${{ secrets.DEV_IIS_APP_SERVER }}
+      deployment-user: ${{ secrets.IIS_DEPLOYMENT_USER }}
+      deployment-password: ${{ secrets.IIS_DEPLOYMENT_PASSWORD }}

@@ -1,0 +1,6 @@
+{
+  "name": ".NET Core On-Premises CI/CD",
+  "description": "Per-environment template for building and deploying .NET Core applications on-premises using GitHub Actions",
+  "iconName": "net",
+  "categories": ["continuous-integration", "deployment", "C#", "ASP.NET"]
+}

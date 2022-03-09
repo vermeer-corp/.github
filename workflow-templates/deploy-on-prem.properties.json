@@ -1,0 +1,6 @@
+{
+  "name": "Deploy On-Premises IIS",
+  "description": "Deploy the specified artifact to an on-premises IIS and replace secrets in specified config files",
+  "iconName": "web-server",
+  "categories": ["deployment"]
+}

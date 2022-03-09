@@ -1,0 +1,53 @@
+name: Deploy
+
+on:
+  workflow_call:
+    inputs:
+      deploy-environment:
+        required: true
+        type: string
+      app-name:
+        required: true
+        type: string
+      server-number:
+        required: false
+        type: number
+        default: 1
+    secrets:
+      app-pool:
+        required: true
+      app-server:
+        required: true
+      deployment-user:
+        required: true
+      deployment-password:
+        required: true
+      # Add any other secrets you need to replace with variable substitution here
+      #glovia-connection-string:
+      #  required: true
+
+jobs:
+  deploy:
+    name: Deploy API
+    runs-on: [self-hosted, windows, x64, msdeploy]
+    environment: ${{ inputs.deploy-environment }}
+    steps:
+      - name: Download a single artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: publish-package
+          path: publish-package
+      - name: App Settings Variable Substitution
+        uses: microsoft/variable-substitution@v1
+        with:
+          # Modify this glob pattern as needed to match the config files you want to update
+          files: "**/publish-package/appsettings.json"
+        env:
+          # Add variables you need to substitute here
+          #See https://github.com/marketplace/actions/variable-substitution
+          #ConnectionStrings.glovia: ${{ secrets.glovia-connection-string }}
+      - name: Deploy to ${{ inputs.deploy-environment }} IIS ${{ inputs.server-number }}
+        shell: pwsh
+        run: |
+          & 'C:\program files\iis\microsoft web deploy v3\msdeploy.exe' -verb:sync -source:iisApp='${{ github.workspace }}\publish-package' -dest:iisApp='${{ secrets.app-pool }}\${{ inputs.app-name }}',ComputerName='${{ secrets.app-server }}${{ secrets.app-pool }}',UserName='${{ secrets.deployment-user }}',Password='${{ secrets.deployment-password }}',AuthType='Basic' -allowUntrusted -enablerule:AppOffline
+        working-directory: publish-package
