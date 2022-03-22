@@ -11,19 +11,22 @@ on:
     branches:
       - $default-branch
 
-env:
-  # Publish environment (one of: development, test, uat, production)
-  PUBLISH_ENVIRONMENT: development
-  # App name to publish to deployment servers
-  # Lower case
-  # Must not contain spaces - use hyphens to separate words
-  APP_NAME: app-name
+# All of the following variable strings in this file need to be replaced with the appropriate values.
+# Each variable can be used more than once. Make sure you replace all of them.
+# Examples are provided after the ':' character in each line.
+
+# Publish environment (one of: development, test, uat, production)
+# $PUBLISH_ENVIRONMENT$: development
+# App name (URL path) to publish to deployment servers
+# Lower case
+# Must not contain spaces - use hyphens to separate words
+# $APP_NAME$: app-name
 
 jobs:
   build:
     name: Build Vue.js
     runs-on: ubuntu-latest
-    environment: $env.PUBLISH_ENVIRONMENT
+    environment: $PUBLISH_ENVIRONMENT$
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js 16.x
@@ -41,7 +44,7 @@ jobs:
         run: npm run test:unit -- --passWithNoTests
         if: ${{ success() }}
       - name: Build
-        run: npm run build -- --mode $env.PUBLISH_ENVIRONMENT
+        run: npm run build -- --mode $PUBLISH_ENVIRONMENT$
         # Update the env section below with any secrets that you need to pass to the build as environment variables
         # env:
         #   VUE_APP_GOOGLE_MAPS_KEY: ${{ secrets.VUE_APP_GOOGLE_MAPS_KEY }}
@@ -62,10 +65,11 @@ jobs:
     # Update the path here to match your repository name and location for the deploy-on-prem workflow template
     uses: vermeer-corp/repository/.github/workflows/deploy-on-prem.yml@$default-branch
     with:
-      deploy-environment: $env.PUBLISH_ENVIRONMENT
-      app-name: $env.APP_NAME
+      deploy-environment: $PUBLISH_ENVIRONMENT$
+      app-name: $APP_NAME$
       server-number: 1
     secrets:
+      # Update the secret names to match the environment (DEV, TEST, UAT, PROD)
       app-pool: ${{ secrets.DEV_IIS_APP_POOL }}
       app-server: ${{ secrets.DEV_IIS_APP_SERVER }}
       deployment-user: ${{ secrets.IIS_DEPLOYMENT_USER }}
