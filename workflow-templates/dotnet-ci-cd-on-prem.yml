@@ -9,37 +9,38 @@ on:
     branches:
       - $default-branch
   workflow_dispatch:
-    branches:
-      - $default-branch
 
-env:
-  # Configuration type to build
-  BUILD_CONFIGURATION: Debug
-  # Path to the project to publish relative to the root of the project
-  PUBLISH_PROJECT: app-name/app-name.csproj
-  # Glob pattern for the build outputs to publish relative to the root of the project
-  PUBLISH_PATH: app-name/bin/Debug/net6.0/publish/*
-  # Publish environment (one of: development, test, uat, production)
-  PUBLISH_ENVIRONMENT: development
-  # App name to publish to deployment servers
-  # Lower case
-  # Must not contain spaces - use hyphens to separate words
-  APP_NAME: app-name
-  # Axway environment (one of: dev, test, uat, prod)
-  AXWAY_ENVIRONMENT: dev
-  # Axway API Name - The name of the API as configured in the Axway API Manager
-  AXWAY_API_NAME: API Name
-  # Swagger URL - The URL of the deployed Swagger file
-  SWAGGER_URL: https://devapi.vermeer.com/api-name/swagger/v1/swagger.json
+# All of the following variable strings in this file need to be replaced with the appropriate values.
+# Each variable can be used more than once. Make sure you replace all of them.
+# Examples are provided after the ':' character in each line.
+
+# Configuration type to build
+# $BUILD_CONFIGURATION$: Debug
+# Path to the project to publish relative to the root of the project
+# $PUBLISH_PROJECT$: app-name/app-name.csproj
+# Glob pattern for the build outputs to publish relative to the root of the project
+# $PUBLISH_PATH$: app-name/bin/Debug/net6.0/publish/*
+# Publish environment (one of: development, test, uat, production)
+# $PUBLISH_ENVIRONMENT$: development
+# App name (URL path) to publish to deployment servers
+# Lower case
+# Must not contain spaces - use hyphens to separate words
+# $APP_NAME$: app-name
+# Axway environment (one of: dev, test, uat, prod)
+# $AXWAY_ENVIRONMENT$: dev
+# Axway API Name - The name of the API as configured in the Axway API Manager
+# $AXWAY_API_NAME$: API Name
+# Swagger URL - The URL of the deployed Swagger file
+# $SWAGGER_URL$: https://devapi.vermeer.com/$APP_NAME$/swagger/v1/swagger.json
 
 jobs:
   build:
     uses: vermeer-corp/it-core-actions/.github/workflows/build-dotnet.yml@v1
-    concurrency: $env.PUBLISH_ENVIRONMENT
+    concurrency: $PUBLISH_ENVIRONMENT$
     with:
-      publish-project: $env.PUBLISH_PROJECT
-      publish-path: $env.PUBLISH_PATH
-      build-configuration: Debug
+      publish-project: $PUBLISH_PROJECT$
+      publish-path: $PUBLISH_PATH$
+      build-configuration: $BUILD_CONFIGURATION$
       # Adjust the .NET version if needed for the project
       dotnet-version: 6.0.x
       upload-artifact: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
@@ -47,15 +48,16 @@ jobs:
   deploy:
     needs:
       - build
-    concurrency: $env.PUBLISH_ENVIRONMENT
+    concurrency: $PUBLISH_ENVIRONMENT$
     if: ${{ (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && success() }}
     # Update the path here to match your repository name and location for the deploy-on-prem workflow template
     uses: vermeer-corp/repository/.github/workflows/deploy-on-prem.yml@$default-branch
     with:
-      deploy-environment: $env.PUBLISH_ENVIRONMENT
-      app-name: $env.APP_NAME
+      deploy-environment: $PUBLISH_ENVIRONMENT$
+      app-name: $APP_NAME$
       server-number: 1
     secrets:
+      # Update the secret names to match the environment (DEV, TEST, UAT, PROD)
       app-pool: ${{ secrets.DEV_IIS_API_POOL }}
       app-server: ${{ secrets.DEV_IIS_API_SERVER }}
       deployment-user: ${{ secrets.IIS_DEPLOYMENT_USER }}
@@ -65,16 +67,17 @@ jobs:
       # glovia-connection-string: ${{ secrets.GLOVIA_CONNECTION_STRING }}
   refresh-axway:
     needs:
-      - deploy
-    concurrency: $env.PUBLISH_ENVIRONMENT
+      - deploy # This should be a list of all deployment jobs above for all servers
+    concurrency: $PUBLISH_ENVIRONMENT$
     if: ${{ (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && success() }}
     uses: vermeer-corp/it-core-actions/.github/workflows/refresh-axway.yml@v1
     with:
-      deploy-environment: $env.PUBLISH_ENVIRONMENT
-      axway-environment: $env.AXWAY_ENVIRONMENT
-      axway-api-name: $env.AXWAY_API_NAME
-      swagger-url: $env.SWAGGER_URL
+      deploy-environment: $PUBLISH_ENVIRONMENT$
+      axway-environment: $AXWAY_ENVIRONMENT$
+      axway-api-name: $AXWAY_API_NAME$
+      swagger-url: $SWAGGER_URL$
     secrets:
+      # Update the secret names to match the environment (DEV, TEST, UAT, PROD)
       axway-username: ${{ secrets.AXWAY_DEV_USERNAME }}
       axway-password: ${{ secrets.AXWAY_DEV_PASSWORD }}
       axway-org-id: ${{ secrets.AXWAY_DEV_IT_DEVELOPERS_ORG_ID }}
