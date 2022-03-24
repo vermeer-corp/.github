@@ -37,6 +37,6 @@ Deploy the specified artifact to an on-premises IIS and replace secrets in speci
 
 ### GitLeaks Secret Scan
 
-<img src="./workflow-templates/gitleaks.png" title="GitLeaks Secret Scan" alt="GitLeaks Secret Scan" width="64"/>
+<img src="./workflow-templates/gitleaks.svg" title="GitLeaks Secret Scan" alt="GitLeaks Secret Scan" width="64"/>
 
 Detect passwords, API keys, private keys, and other secrets that have been committed to the codebase.
