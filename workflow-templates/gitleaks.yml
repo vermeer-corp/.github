@@ -1,0 +1,30 @@
+name: GitLeaks Secret Scan
+
+# Only scans the main branch by default.
+# It's recommended to add other branches
+# to catch commited secrets sooner.
+on:
+  push:
+    branches:
+      - $default-branch
+  pull_request:
+    branches:
+      - $default-branch
+  workflow_dispatch:
+    branches:
+      - $default-branch
+
+jobs:
+  gitleaks:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v1
+    
+    - name: Update Secret Definitions  # from the GitLeaks main repository
+      run: mkdir security && wget -P security/ https://raw.githubusercontent.com/zricethezav/gitleaks/master/config/gitleaks.toml
+
+    - name: Run GitLeaks Scan
+      uses: zricethezav/gitleaks-action@master
+      with:
+        config-path: security/gitleaks.toml
