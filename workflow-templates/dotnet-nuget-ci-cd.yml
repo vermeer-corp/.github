@@ -1,0 +1,19 @@
+name: NuGet Package CI/CD
+
+on:
+  push:
+    branches:
+      - $default-branch
+  pull_request:
+    branches:
+      - $default-branch
+  workflow_dispatch:
+
+jobs:
+  nuget:
+    name: Build/Test/Publish
+    uses: vermeer-corp/it-core-actions/.github/workflows/dotnet-nuget-ci-cd.yml@v2
+    with:
+      dotnet-version: 6.0.x
+    secrets:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
