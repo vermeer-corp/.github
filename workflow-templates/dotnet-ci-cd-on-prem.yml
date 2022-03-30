@@ -35,7 +35,7 @@ on:
 
 jobs:
   build:
-    uses: vermeer-corp/it-core-actions/.github/workflows/build-dotnet.yml@v1
+    uses: vermeer-corp/it-core-actions/.github/workflows/build-dotnet.yml@v2
     concurrency: $PUBLISH_ENVIRONMENT$
     with:
       publish-project: $PUBLISH_PROJECT$
@@ -44,6 +44,8 @@ jobs:
       # Adjust the .NET version if needed for the project
       dotnet-version: 6.0.x
       upload-artifact: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
+    secrets:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
   # Repeat this section as needed for each deployment server
   deploy:
     needs:

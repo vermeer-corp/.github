@@ -7,6 +7,7 @@ This repo contains the Vermeer profile markdown and GitHub Actions workflow temp
 To use these templates, see [Using starter workflows](https://docs.github.com/en/actions/using-workflows/using-starter-workflows#using-starter-workflows) in the GitHub Actions documentation.
 
 ---
+
 ### .NET On-Premises CI/CD
 
 <img src="./workflow-templates/net.svg" title=".NET On-Premises CI/CD" alt=".NET On-Premises CI/CD" width="64"/>
@@ -40,3 +41,11 @@ Deploy the specified artifact to an on-premises IIS and replace secrets in speci
 <img src="./workflow-templates/gitleaks.svg" title="GitLeaks Secret Scan" alt="GitLeaks Secret Scan" width="64"/>
 
 Detect passwords, API keys, private keys, and other secrets that have been committed to the codebase.
+
+---
+
+### .NET NuGet CI/CD to GitHub Packages
+
+<img src="./workflow-templates/nuget.svg" title=".NET NuGet CI/CD to GitHub Packages" alt=".NET NuGet CI/CD to GitHub Packages" width="64"/>
+
+CI/CD template for building, testing, and publishing NuGet packages to GitHub Packages.
