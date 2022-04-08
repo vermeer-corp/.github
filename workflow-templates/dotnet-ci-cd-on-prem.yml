@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - $default-branch
+  # Remove the Pull Request section below for Test and Production environments
   pull_request:
     branches:
       - $default-branch
@@ -25,6 +26,7 @@ on:
 # App name (URL path) to publish to deployment servers
 # Lower case
 # Must not contain spaces - use hyphens to separate words
+# If you are replacing an existing Bamboo deployment, copy this value from the Bamboo deployment settings
 # $APP_NAME$: app-name
 # Axway environment (one of: dev, test, uat, prod)
 # $AXWAY_ENVIRONMENT$: dev
@@ -46,7 +48,7 @@ jobs:
       upload-artifact: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
     secrets:
       github-token: ${{ secrets.GITHUB_TOKEN }}
-  # Repeat this section as needed for each deployment server
+  # Repeat this section as needed for each deployment server - Test (formerly the UAT servers) and Production have 2 servers. Job sections need unique ids, so for test and production, use deploy-server-1 and deploy-server-2 respectively.
   deploy:
     needs:
       - build
@@ -68,8 +70,12 @@ jobs:
       # The secret names should match you use in the deploy-on-prem workflow template
       # glovia-connection-string: ${{ secrets.GLOVIA_CONNECTION_STRING }}
   refresh-axway:
-    needs:
-      - deploy # This should be a list of all deployment jobs above for all servers
+    needs: # This should be a list of all deployment jobs above for all servers
+      # development
+      - deploy
+      # test and production
+      # - deploy-server-1
+      # - deploy-server-2
     concurrency: $PUBLISH_ENVIRONMENT$
     if: ${{ (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && success() }}
     uses: vermeer-corp/it-core-actions/.github/workflows/refresh-axway.yml@v1
