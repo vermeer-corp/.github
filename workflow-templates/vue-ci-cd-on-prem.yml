@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - $default-branch
+  # Remove the Pull Request section below for Test and Production environments
   pull_request:
     branches:
       - $default-branch
