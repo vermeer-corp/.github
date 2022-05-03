@@ -1,8 +1,10 @@
 name: GitLeaks Secret Scan
 
-# Only scans the main branch by default.
-# It's recommended to add other branches
-# to catch commited secrets sooner.
+# It's recommended to leave the triggers like this
+# to reduce workflows running on all branches. To
+# catch commited secrets sooner, please install a
+# pre-commit hook as shown at:
+# https://github.com/zricethezav/gitleaks#pre-commit
 on:
   push:
     branches:
