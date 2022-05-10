@@ -27,6 +27,7 @@ jobs:
       run: mkdir security && wget -P security/ https://raw.githubusercontent.com/zricethezav/gitleaks/master/config/gitleaks.toml
 
     - name: Run GitLeaks Scan
-      uses: zricethezav/gitleaks-action@master
-      with:
-        config-path: security/gitleaks.toml
+        id: gitleaks
+        uses: DariuszPorowski/github-action-gitleaks@v2
+        with:
+          config-path: security/gitleaks.toml
