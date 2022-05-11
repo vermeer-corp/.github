@@ -12,7 +12,7 @@ All security reports should contain a detailed summary of the issue and suggeste
 
 ## Security point of contact
 
-We have a different contact email for each department prefix (examples: it, dlo, ats...)
+We have a different contact email for each department prefix
 
 | Prefix | Email |
 | --- | --- |
