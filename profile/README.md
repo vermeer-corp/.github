@@ -2,7 +2,7 @@
 
 ## Report a security issue
 
-[Vermeer GitHub Security Policy](../SECURITY.md)
+[Vermeer GitHub Security Policy](https://github.com/vermeer-corp/.github/blob/main/SECURITY.md)
 
 ## View current GitHub standards and migration information
 
