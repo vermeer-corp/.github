@@ -20,13 +20,13 @@ jobs:
   gitleaks:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v1
-    
-    - name: Update Secret Definitions  # from the GitLeaks main repository
-      run: mkdir security && wget -P security/ https://raw.githubusercontent.com/zricethezav/gitleaks/master/config/gitleaks.toml
+      - name: Checkout Code
+        uses: actions/checkout@v1
 
-    - name: Run GitLeaks Scan
+      - name: Update Secret Definitions # from the GitLeaks main repository
+        run: mkdir security && wget -P security/ https://raw.githubusercontent.com/zricethezav/gitleaks/master/config/gitleaks.toml
+
+      - name: Run GitLeaks Scan
         id: gitleaks
         uses: DariuszPorowski/github-action-gitleaks@v2
         with:
