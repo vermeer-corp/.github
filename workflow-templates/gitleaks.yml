@@ -30,4 +30,4 @@ jobs:
         id: gitleaks
         uses: DariuszPorowski/github-action-gitleaks@v2
         with:
-          config-path: security/gitleaks.toml
+          config: security/gitleaks.toml
