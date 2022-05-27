@@ -26,6 +26,6 @@ jobs:
 
       - name: Run GitLeaks Scan
         id: gitleaks
-        uses: lawndoc/gitleaks-action@v2
+        uses: DariuszPorowski/github-action-gitleaks@v2
         with:
           config: security/gitleaks.toml
