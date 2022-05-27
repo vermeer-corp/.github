@@ -13,8 +13,6 @@ on:
     branches:
       - $default-branch
   workflow_dispatch:
-    branches:
-      - $default-branch
 
 jobs:
   gitleaks:
@@ -28,6 +26,6 @@ jobs:
 
       - name: Run GitLeaks Scan
         id: gitleaks
-        uses: DariuszPorowski/github-action-gitleaks@v2
+        uses: lawndoc/gitleaks-action@v2
         with:
           config: security/gitleaks.toml
