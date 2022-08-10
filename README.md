@@ -50,6 +50,8 @@ Detect passwords, API keys, private keys, and other secrets that have been commi
 
 Statically analyze code to check for code smells, security issues, and other potential problems. There are different versions of this template depending on the project's programming language.
 
+---
+
 ### .NET NuGet CI/CD to GitHub Packages
 
 <img src="./workflow-templates/nuget.svg" title=".NET NuGet CI/CD to GitHub Packages" alt=".NET NuGet CI/CD to GitHub Packages" width="64"/>
