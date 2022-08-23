@@ -1,0 +1,6 @@
+{
+  "name": "SonarQube Scan (Gradle)",
+  "description": "Static analysis tool that scans your code to find things like code smells, bugs, and potential security issues.",
+  "iconName": "sonarqube",
+  "categories": ["monitoring"]
+}
