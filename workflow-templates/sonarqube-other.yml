@@ -1,7 +1,6 @@
 name: SonarQube Scan
 # This scan is for langauges not specified in the other workflow types (TS, JS, Python, Go, etc...)
 # Repositories using this scan need to have a sonar-project.properties file included in the top level directory
-# Please see the SonarQube setup documentation for more information: <TODO: include doc link once published>
 on:
   push:
     branches:
