@@ -1,7 +1,7 @@
 name: SonarQube Scan
 # This workflow is a starter template for scanning projects that are built with Gradle.
 # Repositories using this workflow need to have SonarQube added to their build.gradle file in the top level directory.
-# For more information, please see the SonarQube setup documentation: <TODO: link to SonarQube docs once published>
+# For more information, please see the SonarQube setup documentation: https://docs.sonarqube.org/latest/analysis/scan/sonarscanner-for-gradle/
 on:
   push:
     branches:
