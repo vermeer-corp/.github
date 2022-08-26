@@ -1,0 +1,52 @@
+# Note: This workflow requires a projectUrl and repository attribute
+# in the .nuspec file to publish to GitHub Packages.
+#
+# <?xml version="1.0"?>
+# <package >
+#   <metadata>
+#     ...
+#     <projectUrl>https://github.com/vermeer-corp/repo-url</projectUrl>
+#     <repository type="git" url="https://github.com/vermeer-corp/repo-url.git"/>
+#     ...
+#   </metadata>
+#   ...
+# </package>
+#
+# Update this name to <Development, Test, Production> Build & Deploy as needed
+name: Environment NuGet Package CI/CD
+
+on:
+  push:
+    branches:
+      - $default-branch
+  # Remove the Pull Request section below for Test and Production environments
+  pull_request:
+    branches:
+      - $default-branch
+  workflow_dispatch:
+
+# All of the following variable strings in this file need to be replaced with the appropriate values.
+# Each variable can be used more than once. Make sure you replace all of them.
+# Examples are provided after the ':' character in each line.
+
+# Configuration type to build
+# $BUILD_CONFIGURATION$: Debug
+# Path to the project to build relative to the root of the project
+# $BUILD_PROJECT$: app-name/app-name.csproj
+# Path to the nuspec or csproj for the NuGet package relative to the root of the project
+# $NUGET_PROJECT$: app-name/app-name.nuspec
+# Glob pattern for the build outputs to publish relative to the root of the project
+
+jobs:
+  nuget:
+    name: Build/Test/Publish
+    uses: vermeer-corp/it-core-actions/.github/workflows/net-framework-nuget-ci-cd.yml@v5
+    with:
+      build-project: $BUILD_PROJECT$
+      nuget-project: $NUGET_PROJECT$
+      build-configuration: $BUILD_CONFIGURATION$
+      # If needed, additional MSBuild arguments go here
+      # msbuild-args:
+      publish-package: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
+    secrets:
+      github-token: ${{ secrets.GITHUB_TOKEN }}

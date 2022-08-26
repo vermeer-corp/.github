@@ -1,4 +1,16 @@
-name: NuGet Package CI/CD
+# Note: This workflow requires a RepositoryUrl attribute in the .csproj file to publish
+# to GitHub Packages
+#
+#    <PropertyGroup>
+#        <TargetFrameworks>netcoreapp3.1;net50;net60</TargetFrameworks>
+#        <Version>...</Version>
+#        <PackageId>...</PackageId>
+#        <PackageDescription>...</PackageDescription>
+#        <RepositoryUrl>https://github.com/vermeer-corp/repo-url.git</RepositoryUrl>
+#    </PropertyGroup>
+#
+# Update this name to <Development, Test, Production> Build & Deploy as needed
+name: Environment NuGet Package CI/CD
 
 on:
   push:
