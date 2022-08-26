@@ -1,0 +1,6 @@
+{
+  "name": ".NET Framework NuGet Package CI/CD",
+  "description": "CI/CD template for building, testing, and publishing .NET Framework 4.x NuGet packages to GitHub Packages using MSBuild and the NuGet CLI",
+  "iconName": "nuget",
+  "categories": ["continuous-integration", "deployment", "C#"]
+}

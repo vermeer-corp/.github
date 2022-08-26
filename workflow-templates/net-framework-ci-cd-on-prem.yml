@@ -1,4 +1,4 @@
-# Update this name to <Development, Test, UAT, Production> Build & Deploy as needed
+# Update this name to <Development, Test, Production> Build & Deploy as needed
 name: Environment Build & Deploy
 
 on:
@@ -35,12 +35,14 @@ on:
 
 jobs:
   build:
-    uses: vermeer-corp/it-core-actions/.github/workflows/build-dotnet.yml@v5
+    uses: vermeer-corp/it-core-actions/.github/workflows/build-net-framework.yml@v5
     concurrency: $PUBLISH_ENVIRONMENT$
     with:
       publish-project: $PUBLISH_PROJECT$
       publish-path: $PUBLISH_PATH$
       build-configuration: $BUILD_CONFIGURATION$
+      # If needed, additional MSBuild arguments go here
+      # msbuild-args:
       # Adjust the .NET version if needed for the project
       dotnet-version: 6.0.x
       upload-artifact: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}

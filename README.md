@@ -8,11 +8,21 @@ To use these templates, see [Using starter workflows](https://docs.github.com/en
 
 ---
 
-### .NET On-Premises CI/CD
+### .NET Core/5/6 On-Premises CI/CD
 
-<img src="./workflow-templates/net.svg" title=".NET On-Premises CI/CD" alt=".NET On-Premises CI/CD" width="64"/>
+<img src="./workflow-templates/net.svg" title=".NET Core/5/6 On-Premises CI/CD" alt=".NET Core/5/6 On-Premises CI/CD" width="64"/>
 
-Per-environment template for building and deploying .NET Core applications on-premises using GitHub Actions.
+Per-environment template for building and deploying .NET Core/5/6 applications on-premises using GitHub Actions.
+
+**Use of this template requires the use of the _Deploy On-Premises IIS_ template.**
+
+---
+
+### .NET Framework 4.x On-Premises CI/CD
+
+<img src="./workflow-templates/net.svg" title=".NET Framework 4.x On-Premises CI/CD" alt=".NET Framework 4.x On-Premises CI/CD" width="64"/>
+
+Per-environment template for building and deploying .NET Framework 4.x applications on-premises using GitHub Actions.
 
 **Use of this template requires the use of the _Deploy On-Premises IIS_ template.**
 
@@ -52,8 +62,43 @@ Statically analyze code to check for code smells, security issues, and other pot
 
 ---
 
-### .NET NuGet CI/CD to GitHub Packages
+### .NET Core/Standard/5/6 NuGet CI/CD to GitHub Packages
 
-<img src="./workflow-templates/nuget.svg" title=".NET NuGet CI/CD to GitHub Packages" alt=".NET NuGet CI/CD to GitHub Packages" width="64"/>
+<img src="./workflow-templates/nuget.svg" title=".NET Core/Standard/5/6 NuGet CI/CD to GitHub Packages" alt=".NET Core/Standard/5/6 NuGet CI/CD to GitHub Packages" width="64"/>
 
-CI/CD template for building, testing, and publishing NuGet packages to GitHub Packages.
+CI/CD template for building, testing, and publishing .NET Core/Standard/5/6 NuGet packages to GitHub Packages.
+
+**Note: This workflow requires a `RepositoryUrl` attribute in the .csproj file to publish to GitHub Packages.**
+
+```xml
+    <PropertyGroup>
+        <TargetFrameworks>netcoreapp3.1;net50;net60</TargetFrameworks>
+        <Version>...</Version>
+        <PackageId>...</PackageId>
+        <PackageDescription>...</PackageDescription>
+        <RepositoryUrl>https://github.com/vermeer-corp/repo-url.git</RepositoryUrl>
+    </PropertyGroup>
+```
+
+---
+
+### .NET Framework NuGet CI/CD to GitHub Packages
+
+<img src="./workflow-templates/nuget.svg" title=".NET Framework NuGet CI/CD to GitHub Packages" alt=".NET Framework NuGet CI/CD to GitHub Packages" width="64"/>
+
+CI/CD template for building, testing, and publishing .NET Framework NuGet packages to GitHub Packages.
+
+**Note: This workflow requires a `projectUrl` and `repository` attribute in the .nuspec file to publish to GitHub Packages.**
+
+```xml
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    ...
+    <projectUrl>https://github.com/vermeer-corp/repo-url</projectUrl>
+    <repository type="git" url="https://github.com/vermeer-corp/repo-url.git"/>
+    ...
+  </metadata>
+  ...
+</package>
+```
