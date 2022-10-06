@@ -135,7 +135,7 @@ jobs:
           artifact-id: ${{inputs.package-name}}_${{needs.build.outputs.current-version}}.${{needs.build.outputs.commit-id}}
           app-name: ${{inputs.app-name}}
           path: "./${{inputs.mpr}}-${{needs.build.outputs.current-version}}.mda"
-          environment: Acceptance ## Make sure that this environment is spelled correctly based on GET https://deploy.mendix.com/api/1/apps/{{app-name}}/environments ##
+          environment: Development ## Make sure that this environment is spelled correctly based on GET https://deploy.mendix.com/api/1/apps/{{app-name}}/environments ##
           model-options: '${{steps.model.outputs.model-options}}'
         env:
           mendix-username: ${{secrets.mendix-username}}

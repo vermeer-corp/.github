@@ -114,7 +114,7 @@ jobs:
     steps:
       - run: |
           $headers = @{
-            'KeyId' = 'f2f4f185-0c9e-4e6b-b77e-0751ef490bf9'
+            'KeyId' = '${{secrets.axway-keyid}}'
             'Content-type' = 'application/json'
           }
           Invoke-RestMethod 'https://webapi.vermeer.com/ApplicationVersions/api/version?application=${{inputs.application-name}}&environment=Development' -Method 'POST' -Headers $headers -Body '{"schemaVersion": 1,"label": "Development","message": "${{needs.get-version-numbers.outputs.development}}","color": "blue"}' | ConvertTo-Json
