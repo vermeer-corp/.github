@@ -1,0 +1,174 @@
+## Ensure that all lines with comments are filled out correctly ##
+
+name: Build and Deploy
+
+on:
+  workflow_call:
+    inputs:
+      mxbuild-version:
+        required: true
+        type: string
+      mpr:
+        required: true
+        type: string
+      app-name:
+        required: true
+        type: string
+      package-name: 
+        required: true
+        type: string
+      github-environment:
+        required: true
+        type: string
+    secrets:
+      mendix-username:
+        required: true
+      mendix-apikey: 
+        required: true
+      sso-environment:
+        required: true
+      vermeer-authorization-client-id:
+        required: true
+      vermeer-authorization-client-secret:
+        required: true
+      vermeer-authorization-domain:
+        required: true
+
+
+jobs:
+  build:
+    name: Build App
+    runs-on: [self-hosted, windows, x64, server2019]
+    environment: ${{ inputs.github-environment }}
+    outputs:
+      commit-id: ${{steps.commit.outputs.commit-id}}
+      current-version: ${{steps.version.outputs.version}}
+    steps:
+      - name: Set up Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Get MxBuild.exe
+        id: mxbuild
+        uses: vermeer-corp/it-mendix-build@v1
+        with:
+          version: ${{ inputs.mxbuild-version }}
+
+      - uses: actions/checkout@v2
+
+      - name: Read Current Version
+        id: version
+        run: echo "::set-output name=version::$(Get-Content .\VERSION.txt)"
+        shell: pwsh
+
+      - name: Build App
+        id: buildapp
+        run: >
+          ${{ steps.mxbuild.outputs.binary }}
+          --java-home="${env:JAVA_HOME}\bin"
+          --java-exe-path="${env:JAVA_HOME}\bin\java.exe"
+          --model-version="${{steps.version.outputs.version}}"
+          --target=package
+          --output=".\release\${{inputs.mpr}}-${{steps.version.outputs.version}}.mda"
+          ".\${{inputs.mpr}}.mpr"
+        shell: pwsh
+  
+      - name: Get Commit ID
+        id: commit
+        run: echo "::set-output name=commit-id::$((get-content .\.git\FETCH_HEAD).substring(0,7))"
+        shell: pwsh
+
+      - uses: bluwy/substitute-string-action@v1
+        name: Substitute Model Options Variables
+        with:
+          _input-file: './modelOptions.json'
+          _format-key: '%%key%%'
+          _output-file: './modelOptions.json'
+        env:
+          INPUT_SSO_ENVIRONMENT: ${{secrets.sso-environment}}
+          INPUT_VERMEER_AUTHORIZATION_CLIENT_ID: ${{secrets.vermeer-authorization-client-id}}
+          INPUT_VERMEER_AUTHORIZATION_CLIENT_SECRET: ${{secrets.vermeer-authorization-client-secret}}
+          INPUT_VERMEER_AUTHORIZATION_DOMAIN: ${{secrets.vermeer-authorization-domain}} 
+          ## add more constants here
+
+      - name: Upload Model Options Artifact
+        if: ${{ (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && success() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: modelOptions.${{steps.commit.outputs.commit-id}}
+          path: "./modelOptions.json"
+
+      - name: Upload MDA Artifact
+        if: ${{ (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && success() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{inputs.package-name}}_${{steps.version.outputs.version}}.${{steps.commit.outputs.commit-id}}
+          path: "./release/${{inputs.mpr}}-${{steps.version.outputs.version}}.mda"
+
+  deploy:
+    name: Deploy
+    needs:
+      - build
+    runs-on: [self-hosted, linux]
+    if: ${{ (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && success() }}
+    steps:
+      - name: Download MDA Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{inputs.package-name}}_${{needs.build.outputs.current-version}}.${{needs.build.outputs.commit-id}}
+
+      - name: Download Model Options Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: modelOptions.${{needs.build.outputs.commit-id}}
+
+      - name: Read Model Options
+        id: model
+        run: echo "::set-output name=model-options::$(Get-Content .\modelOptions.json)"
+        shell: pwsh
+
+      - name: Deploy to Development
+        if: ${{github.ref_name == 'development'}}
+        uses: vermeer-corp/it-mendix-deploy@v1
+        with:
+          artifact-id: ${{inputs.package-name}}_${{needs.build.outputs.current-version}}.${{needs.build.outputs.commit-id}}
+          app-name: ${{inputs.app-name}}
+          path: "./${{inputs.mpr}}-${{needs.build.outputs.current-version}}.mda"
+          environment: Acceptance ## Make sure that this environment is spelled correctly based on GET https://deploy.mendix.com/api/1/apps/{{app-name}}/environments ##
+          model-options: '${{steps.model.outputs.model-options}}'
+        env:
+          mendix-username: ${{secrets.mendix-username}}
+          mendix-apikey: ${{secrets.mendix-apikey}}
+
+      - name: Deploy to Acceptance
+        if: ${{github.ref_name == 'test'}}
+        uses: vermeer-corp/it-mendix-deploy@v1
+        with:
+          artifact-id: ${{inputs.package-name}}_${{needs.build.outputs.current-version}}.${{needs.build.outputs.commit-id}}
+          app-name: ${{inputs.app-name}}
+          path: "./${{inputs.mpr}}-${{needs.build.outputs.current-version}}.mda"
+          environment: Acceptance
+          model-options: '${{steps.model.outputs.model-options}}'
+        env:
+          mendix-username: ${{secrets.mendix-username}}
+          mendix-apikey: ${{secrets.mendix-apikey}}
+      
+      - name: Deploy to Production
+        if: ${{github.ref_name == 'main'}}
+        uses: vermeer-corp/it-mendix-deploy@v1
+        with:
+          artifact-id: ${{inputs.package-name}}_${{needs.build.outputs.current-version}}.${{needs.build.outputs.commit-id}}
+          app-name: ${{inputs.app-name}}
+          path: "./${{inputs.mpr}}-${{needs.build.outputs.current-version}}.mda"
+          environment: Production
+          model-options: '${{steps.model.outputs.model-options}}'
+        env:
+          mendix-username: ${{secrets.mendix-username}}
+          mendix-apikey: ${{secrets.mendix-apikey}}
+
+      - name: Cleanup MDA
+        run: rm "./${{inputs.mpr}}-${{needs.build.outputs.current-version}}.mda"
+
+      - name: Cleanup Model Options
+        run: rm ./modelOptions.json
