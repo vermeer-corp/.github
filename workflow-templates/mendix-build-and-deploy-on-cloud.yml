@@ -55,6 +55,9 @@ jobs:
         with:
           version: ${{ inputs.mxbuild-version }}
 
+      - name: Support longpaths
+        run: git config --global core.longpaths true
+
       - uses: actions/checkout@v2
 
       - name: Read Current Version

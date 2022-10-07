@@ -18,6 +18,9 @@ jobs:
     name: Check for current release number
     if: ${{ (github.event_name == 'pull_request') && github.ref_name != 'development' && github.ref_name != 'test' && github.ref_name != 'main'}}
     steps:
+      - name: Support longpaths
+        run: git config --global core.longpaths true
+
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.event.push.head.ref }}
@@ -53,6 +56,9 @@ jobs:
       test: ${{steps.test.outputs.version != '' && steps.test.outputs.version || '0.0.0'}}
       development: ${{steps.development.outputs.version != '' && steps.development.outputs.version || '0.0.0'}}
     steps:
+      - name: Support longpaths
+        run: git config --global core.longpaths true
+
       - uses: actions/checkout@v3
         name: Checkout Main
         with:
@@ -128,6 +134,9 @@ jobs:
     runs-on: [self-hosted, linux, almalinux]
     if: ${{ (github.event_name == 'push') && success() }}
     steps:
+      - name: Support longpaths
+        run: git config --global core.longpaths true
+
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.event.push.head.ref }}
