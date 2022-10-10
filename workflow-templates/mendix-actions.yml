@@ -1,4 +1,5 @@
-## Ensure that all lines with comments are filled out correctly ##
+# This workflow also depends on the current project also having the
+# Build and Deploy on Mendix Cloud and Update Version Number of Mendix App workflows.
 
 name: Actions
 
@@ -13,15 +14,30 @@ on:
       - "development"
   workflow_dispatch:
 
+# All of the following variable strings in this file need to be replaced with the appropriate values.
+# Each variable can be used more than once. Make sure you replace all of them.
+# Examples are provided after the ':' character in each line.
+
+# Mendix Studio Pro Version
+# $MX_VERSION$: 9.16.1.50105
+# Name of the main .mpr file in the project folder
+# $MPR$: App Name
+# Name of the app in the mendix cloud url eg. vermeer-appname.mendixcloud.com
+# $APP_NAME$: vermeer-appname
+# Name to give the deployment packages; No spaces allowed
+# $APPNAME$: AppNameNoSpaces
+# Repository name
+# $REPO_NAME$: it-mendix-appname
+
 jobs:
   build-and-deploy:
     name: Mendix
-    uses: vermeer-corp/it-mendix-gitrepotesting/.github/workflows/mendix-build-and-deploy-on-cloud.yml@development ## Confirm repo name i.e. it-mendix-appname
+    uses: vermeer-corp/$REPO_NAME$/.github/workflows/mendix-build-and-deploy-on-cloud.yml@$default-branch
     with:
-      mxbuild-version: '9.16.1.50105' ## Mendix Studio Pro Version ##
-      mpr: 'App Name' ## Name of main .mpr file in the project folder ##
-      app-name: 'vermeer-appname' ## Name of the app in the mendix cloud url eg. vermeer-appname.mendixcloud.com ##
-      package-name: 'AppNameNoSpaces' ## Name to give the deployment packages; No spaces allowed ##
+      mxbuild-version: '$MX_VERSION$'
+      mpr: '$MPR$'
+      app-name: '$APP_NAME$'
+      package-name: '$APPNAME$'
       github-environment: ${{(github.ref_name == 'main' && 'Production') || (github.ref_name == 'test' && 'Test') || 'Development'}}
     secrets:
       mendix-username: ${{secrets.MENDIX_USERNAME}}
@@ -33,9 +49,9 @@ jobs:
 
   version:
     name: Version
-    uses: vermeer-corp/it-mendix-gitrepotesting/.github/workflows/mendix-update-version.yml@development ## Confirm repo name i.e. it-mendix-appname
+    uses: vermeer-corp/$REPO_NAME$/.github/workflows/mendix-update-version.yml@$default-branch
     with:
-      application-name: 'vermeer-appname' ## Name of the app in the mendix cloud url eg. vermeer-appname.mendixcloud.com ##
+      application-name: '$APP_NAME$'
     secrets: 
       axway-keyid: ${{secrets.AXWAY_KEYID}}
 

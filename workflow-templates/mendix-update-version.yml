@@ -1,5 +1,3 @@
-## Ensure that all lines with comments are filled out correctly ##
-
 name: Update Readme
 
 on:

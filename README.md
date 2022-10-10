@@ -102,3 +102,13 @@ CI/CD template for building, testing, and publishing .NET Framework NuGet packag
   ...
 </package>
 ```
+
+---
+
+### Mendix Actions
+
+<img src="./workflow-templates/mendix.svg" title="Mendix Actions" alt="Mendix Actions" width="64"/>
+
+CI/CD template for building, deploying, and managing the versions of Mendix Applicaiton Projects.
+
+**Use of this template requires the use of the _Build and Deploy on Mendix Cloud_ and the _Update Version Number of Mendix App_ template.**

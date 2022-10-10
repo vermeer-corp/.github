@@ -1,5 +1,5 @@
 {
-    "name": "Mendix actions",
+    "name": "Mendix Actions",
     "description": "Mendix build, deploy, and update version numbers actions.",
     "iconName": "mendix",
     "categories": ["deployment", "Java", "JavaScript"]
