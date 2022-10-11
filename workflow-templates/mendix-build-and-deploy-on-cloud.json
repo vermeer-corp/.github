@@ -1,6 +1,0 @@
-{
-    "name": "Build and Deploy on Mendix Cloud",
-    "description": "Builds and deploys a Mendix application on the Mendix Cloud",
-    "iconName": "mendix",
-    "categories": ["deployment", "Java", "JavaScript"]
-  }
