@@ -1,0 +1,160 @@
+name: Update Readme
+
+on:
+  workflow_call:
+    inputs:
+      application-name:
+        required: true
+        type: string
+    secrets:
+      axway-keyid:
+        required: true
+
+jobs:
+  check-for-release:
+    runs-on: [self-hosted, linux, almalinux]
+    name: Check for current release number
+    if: ${{ (github.event_name == 'pull_request') && github.ref_name != 'development' && github.ref_name != 'test' && github.ref_name != 'main'}}
+    steps:
+      - name: Support longpaths
+        run: git config --global core.longpaths true
+
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.push.head.ref }}
+
+      - name: Read Version
+        id: check_version
+        run: echo "::set-output name=version::$(Get-Content .\VERSION.txt)"
+        shell: pwsh
+
+      - uses: cardinalby/git-get-release-action@1.2.2
+        name: Search for release
+        id: find_release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag: ${{steps.check_version.outputs.version}}
+          doNotFailIfNotFound: true
+
+      - name: Release does not exist
+        if: ${{steps.find_release.outputs.name != '' }}
+        uses: actions/github-script@v3
+        with:
+          script: |
+              core.setFailed('The release "${{steps.check_version.outputs.version}}" already exists.')
+
+  get-version-numbers:
+    if: ${{ (github.event_name == 'push') && success() }}
+    environment: Development
+    runs-on: [self-hosted, windows, x64, server2019]
+    name: Get Version Numbers
+    outputs:
+      main: ${{steps.main.outputs.version != '' && steps.main.outputs.version || '0.0.0'}}
+      test: ${{steps.test.outputs.version != '' && steps.test.outputs.version || '0.0.0'}}
+      development: ${{steps.development.outputs.version != '' && steps.development.outputs.version || '0.0.0'}}
+    steps:
+      - name: Support longpaths
+        run: git config --global core.longpaths true
+
+      - uses: actions/checkout@v3
+        name: Checkout Main
+        with:
+          ref: main
+
+      - name: Check Main Version existence
+        id: check_main
+        uses: andstor/file-existence-action@v1
+        with:
+          files: "./VERSION.txt"
+
+      - name: Read Main Version
+        id: main
+        if: steps.check_main.outputs.files_exists == 'true'
+        run: echo "::set-output name=version::$(Get-Content .\VERSION.txt)"
+        shell: pwsh
+
+      - uses: actions/checkout@v3
+        name: Checkout Test
+        with:
+          ref: test
+
+      - name: Check Test Version existence
+        id: check_test
+        uses: andstor/file-existence-action@v1
+        with:
+          files: "./VERSION.txt"
+
+      - name: Read Test Version
+        id: test
+        if: steps.check_test.outputs.files_exists == 'true'
+        run: echo "::set-output name=version::$(Get-Content .\VERSION.txt)"
+        shell: pwsh
+
+      - uses: actions/checkout@v3
+        name: Checkout Development
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Check Development Version existence
+        id: check_development
+        uses: andstor/file-existence-action@v1
+        with:
+          files: "./VERSION.txt"
+
+      - name: Read Development Version
+        id: development
+        if: steps.check_development.outputs.files_exists == 'true'
+        run: echo "::set-output name=version::$(Get-Content .\VERSION.txt)"
+        shell: pwsh
+
+  update-readme:
+    if: ${{ (github.event_name == 'push') && success() }}
+    environment: Development
+    name: Update Readme
+    runs-on: ubuntu-latest
+    needs:
+      - get-version-numbers
+    steps:
+      - run: |
+          $headers = @{
+            'KeyId' = '${{secrets.axway-keyid}}'
+            'Content-type' = 'application/json'
+          }
+          Invoke-RestMethod 'https://webapi.vermeer.com/ApplicationVersions/api/version?application=${{inputs.application-name}}&environment=Development' -Method 'POST' -Headers $headers -Body '{"schemaVersion": 1,"label": "Development","message": "${{needs.get-version-numbers.outputs.development}}","color": "blue"}' | ConvertTo-Json
+          Invoke-RestMethod 'https://webapi.vermeer.com/ApplicationVersions/api/version?application=${{inputs.application-name}}&environment=Test' -Method 'POST' -Headers $headers -Body '{"schemaVersion": 1,"label": "Test","message": "${{needs.get-version-numbers.outputs.test}}","color": "orange"}' | ConvertTo-Json
+          Invoke-RestMethod 'https://webapi.vermeer.com/ApplicationVersions/api/version?application=${{inputs.application-name}}&environment=Production' -Method 'POST' -Headers $headers -Body '{"schemaVersion": 1,"label": "Production","message": "${{needs.get-version-numbers.outputs.main}}","color": "brightgreen"}' | ConvertTo-Json
+          
+        shell: pwsh
+
+  update-tags:
+    name: Update Tags
+    runs-on: [self-hosted, linux, almalinux]
+    if: ${{ (github.event_name == 'push') && success() }}
+    steps:
+      - name: Support longpaths
+        run: git config --global core.longpaths true
+
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.push.head.ref }}
+
+      - name: Read Version
+        id: check_version
+        run: echo "::set-output name=version::$(Get-Content .\VERSION.txt)"
+        shell: pwsh
+        
+      - name: Update release
+        uses: mini-bomba/create-github-release@v1.1.2
+        id: update-release
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{steps.check_version.outputs.version}}
+          name: ${{steps.check_version.outputs.version}}
+          body: ${{steps.check_version.outputs.version}}
+          prerelease: ${{github.ref_name != 'main'}}
+
+      - run: |
+          echo Release: ${{steps.check_version.outputs.version}}
+          echo Tag: ${{steps.check_version.outputs.version}}
+          echo Prerelease: ${{github.ref_name != 'main'}}

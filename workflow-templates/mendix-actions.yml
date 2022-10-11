@@ -1,0 +1,59 @@
+# This workflow also depends on the current project also having the
+# Build and Deploy on Mendix Cloud and Update Version Number of Mendix App workflows.
+
+name: Actions
+
+on:
+  push:
+    branches:
+      - "development"
+      - "test"
+      - "main"
+  pull_request:
+    branches:
+      - "development"
+  workflow_dispatch:
+
+# All of the following variable strings in this file need to be replaced with the appropriate values.
+# Each variable can be used more than once. Make sure you replace all of them.
+# Examples are provided after the ':' character in each line.
+
+# Mendix Studio Pro Version
+# $MX_VERSION$: 9.16.1.50105
+# Name of the main .mpr file in the project folder
+# $MPR$: App Name
+# Name of the app in the mendix cloud url eg. vermeer-appname.mendixcloud.com
+# $APP_NAME$: vermeer-appname
+# Name to give the deployment packages; No spaces allowed
+# $APPNAME$: AppNameNoSpaces
+# Repository name
+# $REPO_NAME$: it-mendix-appname
+
+jobs:
+  build-and-deploy:
+    name: Mendix
+    uses: vermeer-corp/$REPO_NAME$/.github/workflows/mendix-build-and-deploy-on-cloud.yml@$default-branch
+    with:
+      mxbuild-version: '$MX_VERSION$'
+      mpr: '$MPR$'
+      app-name: '$APP_NAME$'
+      package-name: '$APPNAME$'
+      github-environment: ${{(github.ref_name == 'main' && 'Production') || (github.ref_name == 'test' && 'Test') || 'Development'}}
+    secrets:
+      mendix-username: ${{secrets.MENDIX_USERNAME}}
+      mendix-apikey: ${{secrets.MENDIX_API_KEY}}
+      sso-environment: ${{secrets.SSO_ENVIRONMENT}}
+      vermeer-authorization-client-id: ${{secrets.VERMEER_AUTHORIZATION_CLIENT_ID}}
+      vermeer-authorization-client-secret: ${{secrets.VERMEER_AUTHORIZATION_CLIENT_SECRET}}
+      vermeer-authorization-domain: ${{secrets.VERMEER_AUTHORIZATION_DOMAIN}}
+
+  version:
+    name: Version
+    uses: vermeer-corp/$REPO_NAME$/.github/workflows/mendix-update-version.yml@$default-branch
+    with:
+      application-name: '$APP_NAME$'
+    secrets: 
+      axway-keyid: ${{secrets.AXWAY_KEYID}}
+
+  
+
