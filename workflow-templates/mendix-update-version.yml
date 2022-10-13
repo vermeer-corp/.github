@@ -25,7 +25,7 @@ jobs:
 
       - name: Read Version
         id: check_version
-        run: echo "::set-output name=version::$(Get-Content .\VERSION.txt)"
+        run: echo "version=$(Get-Content .\VERSION.txt)" >> $env:GITHUB_OUTPUT
         shell: pwsh
 
       - uses: cardinalby/git-get-release-action@1.2.2
@@ -71,7 +71,7 @@ jobs:
       - name: Read Main Version
         id: main
         if: steps.check_main.outputs.files_exists == 'true'
-        run: echo "::set-output name=version::$(Get-Content .\VERSION.txt)"
+        run: echo "version=$(Get-Content .\VERSION.txt)" >> $env:GITHUB_OUTPUT
         shell: pwsh
 
       - uses: actions/checkout@v3
@@ -88,7 +88,7 @@ jobs:
       - name: Read Test Version
         id: test
         if: steps.check_test.outputs.files_exists == 'true'
-        run: echo "::set-output name=version::$(Get-Content .\VERSION.txt)"
+        run: echo "version=$(Get-Content .\VERSION.txt)" >> $env:GITHUB_OUTPUT
         shell: pwsh
 
       - uses: actions/checkout@v3
@@ -105,7 +105,7 @@ jobs:
       - name: Read Development Version
         id: development
         if: steps.check_development.outputs.files_exists == 'true'
-        run: echo "::set-output name=version::$(Get-Content .\VERSION.txt)"
+        run: echo "version=$(Get-Content .\VERSION.txt)" >> $env:GITHUB_OUTPUT
         shell: pwsh
 
   update-readme:
@@ -141,7 +141,7 @@ jobs:
 
       - name: Read Version
         id: check_version
-        run: echo "::set-output name=version::$(Get-Content .\VERSION.txt)"
+        run: echo "version=$(Get-Content .\VERSION.txt)" >> $env:GITHUB_OUTPUT
         shell: pwsh
         
       - name: Update release

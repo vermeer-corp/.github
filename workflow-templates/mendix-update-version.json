@@ -1,6 +1,0 @@
-{
-    "name": "Update Version Number of Mendix App",
-    "description": "Updates the version numbers of each branch in a Mendix repo",
-    "iconName": "mendix",
-    "categories": ["deployment", "Java", "JavaScript"]
-  }
