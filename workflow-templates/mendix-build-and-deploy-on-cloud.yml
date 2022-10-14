@@ -60,7 +60,7 @@ jobs:
 
       - name: Read Current Version
         id: version
-        run: echo "::set-output name=version::$(Get-Content .\VERSION.txt)"
+        run: echo "version=$(Get-Content .\VERSION.txt)" >> $env:GITHUB_OUTPUT
         shell: pwsh
 
       - name: Build App
@@ -77,7 +77,7 @@ jobs:
   
       - name: Get Commit ID
         id: commit
-        run: echo "::set-output name=commit-id::$((get-content .\.git\FETCH_HEAD).substring(0,7))"
+        run: echo "commit-id=$((get-content .\.git\FETCH_HEAD).substring(0,7))" >> $env:GITHUB_OUTPUT
         shell: pwsh
 
       - uses: bluwy/substitute-string-action@v1
@@ -126,7 +126,7 @@ jobs:
 
       - name: Read Model Options
         id: model
-        run: echo "::set-output name=model-options::$(Get-Content .\modelOptions.json)"
+        run: echo "model-options=$(Get-Content .\modelOptions.json)" >> $env:GITHUB_OUTPUT
         shell: pwsh
 
       - name: Deploy to Development
