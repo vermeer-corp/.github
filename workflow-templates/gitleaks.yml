@@ -24,7 +24,7 @@ jobs:
           fetch-depth: "0"
 
       - name: Use Vermeer Definitions # forked from official repo with exceptions for false positives
-        run: mkdir security && wget -P security/ https://raw.githubusercontent.com/vermeer-corp/gitleaks/master/config/gitleaks.toml
+        run: mkdir security; wget -P security/ https://raw.githubusercontent.com/vermeer-corp/gitleaks/master/config/gitleaks.toml
 
       - name: Run GitLeaks Scan
         id: gitleaks
