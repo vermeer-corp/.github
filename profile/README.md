@@ -4,9 +4,10 @@
 
 [Vermeer GitHub Security Policy](https://github.com/vermeer-corp/.github/blob/main/SECURITY.md)
 
-## View current GitHub standards and migration information
+## View current Vermeer technology standards and migration information
 
-[Vermeer GitHub Standards Repo](https://github.com/vermeer-corp/v-github-standards)
+[Vermeer GitHub Standards and migration information](https://github.com/vermeer-corp/v-technology-standards/blob/main/github/README.md)
+[Vermeer REST API Standards](https://github.com/vermeer-corp/v-technology-standards/blob/main/rest-api/REST-API-development-standards.md)
 
 ## View the current Architecture Decision Records in the following repo
 
