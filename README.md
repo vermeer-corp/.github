@@ -112,3 +112,11 @@ CI/CD template for building, testing, and publishing .NET Framework NuGet packag
 CI/CD template for building, deploying, and managing the versions of Mendix Applicaiton Projects.
 
 **Use of this template requires the use of the _Build and Deploy on Mendix Cloud_ and the _Update Version Number of Mendix App_ template.**
+
+---
+
+### LoginVSI Test Runner
+
+<img src="./workflow-templates/loginvsi.svg" title="LoginVSI Test Runner" alt="LoginVSI Test Runner" width="64"/>
+
+Template for running a specified LoginVSI test against a deployed commit.

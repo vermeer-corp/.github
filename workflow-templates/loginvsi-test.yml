@@ -1,0 +1,35 @@
+# This workflow requires a repository secret named for an Axway API Key with permissions
+# to call the LoginVSI Test Runner API.
+
+name: Login VSI Test
+
+on:
+  workflow_call:
+    inputs:
+      test-id:
+        required: true
+        type: string
+      results-email:
+        required: false
+        type: string
+        default: ""
+      comment:
+        required: false
+        type: string
+        default: ""
+    secrets:
+      loginvsi-axway-key-id:
+        required: true
+
+jobs:
+  run-loginvsi-test:
+    name: LoginVSI Test
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          $headers = @{
+            'KeyId' = '${{secrets.loginvsi-axway-key-id}}'
+            'Content-type' = 'application/json'
+          }
+          Invoke-RestMethod 'https://devwebapi.vermeer.com/loginvsi-test-runner/' -Method 'POST' -Headers $headers -Body '{"testId": "${{inputs.test-id}}","resultsEmail": "${{inputs.results-email}}","gitHubRepository": "${{github.repository}}","gitHubCommitHash": "${{github.sha}}",  "gitHubAccessToken": "${{github.token}}","comment": "${{inputs.comment}}"}' | ConvertTo-Json
+        shell: pwsh
