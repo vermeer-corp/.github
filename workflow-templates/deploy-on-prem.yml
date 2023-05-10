@@ -33,12 +33,12 @@ jobs:
     environment: ${{ inputs.deploy-environment }}
     steps:
       - name: Download a single artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: publish-package
           path: publish-package
       - name: App Settings Variable Substitution
-        uses: microsoft/variable-substitution@v1
+        uses: robertlynja/variable-substitution@v1.02
         with:
           # Modify this glob pattern as needed to match the config files you want to update
           files: "**/publish-package/appsettings.json"
