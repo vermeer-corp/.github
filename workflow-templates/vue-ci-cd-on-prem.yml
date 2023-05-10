@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: $PUBLISH_ENVIRONMENT$
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Use Node.js 16.x
         uses: actions/setup-node@v2
         with:
@@ -51,7 +51,7 @@ jobs:
         #   VUE_APP_GOOGLE_MAPS_KEY: ${{ secrets.VUE_APP_GOOGLE_MAPS_KEY }}
         if: ${{ success() }}
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: publish-package
           # Update the path below to match the path of the build output if needed.
