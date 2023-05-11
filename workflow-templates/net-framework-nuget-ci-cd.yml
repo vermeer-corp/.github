@@ -40,7 +40,7 @@ on:
 jobs:
   nuget:
     name: Build/Test/Publish
-    uses: vermeer-corp/it-core-actions/.github/workflows/net-framework-nuget-ci-cd.yml@v5
+    uses: vermeer-corp/it-core-actions/.github/workflows/net-framework-nuget-ci-cd.yml@v6
     with:
       build-project: $BUILD_PROJECT$
       nuget-project: $NUGET_PROJECT$

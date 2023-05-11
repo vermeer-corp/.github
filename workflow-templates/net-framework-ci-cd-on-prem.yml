@@ -35,7 +35,7 @@ on:
 
 jobs:
   build:
-    uses: vermeer-corp/it-core-actions/.github/workflows/build-net-framework.yml@v5
+    uses: vermeer-corp/it-core-actions/.github/workflows/build-net-framework.yml@v6
     concurrency: $PUBLISH_ENVIRONMENT$
     with:
       publish-project: $PUBLISH_PROJECT$
@@ -78,7 +78,7 @@ jobs:
       # - deploy-server-2
     concurrency: $PUBLISH_ENVIRONMENT$
     if: ${{ (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && success() }}
-    uses: vermeer-corp/it-core-actions/.github/workflows/refresh-axway.yml@v5
+    uses: vermeer-corp/it-core-actions/.github/workflows/refresh-axway.yml@v6
     with:
       deploy-environment: $PUBLISH_ENVIRONMENT$
       axway-frontend-path: $AXWAY_FRONTEND_PATH$
