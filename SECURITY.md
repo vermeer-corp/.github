@@ -12,34 +12,19 @@ All security reports should contain a detailed summary of the issue and suggeste
 
 ## Security point of contact
 
-We have a different contact email for each department prefix
-
-| Prefix | Email |
-| --- | --- |
-| v | it-platform_team@vermeer.com |
-| ats | ats-team@vermeer.com |
-| dlo | TBD |
-| it | web_communications-developers@vermeer.com |
-| lc | jwitcraft@vermeer.com |
-| pt | it-platform_team@vermeer.com |
-| sec | it-security@vermeer.com |
-| systems | TBD |
-| vath | TBD |
-| vme | TBD |
-
-If it's not clear who the security point of contact is or the contact is unresponsive, please email it-security@vermeer.com to get help reaching the responsible party.
+Please email it-security@vermeer.com to get help reaching the responsible party.
 
 ## Vulnerability response process
 
-If a vulnerability is discovered or reported in the production branch, the repository maintainers will follow the following process to validate, respond, and remediate:
+If a vulnerability is discovered or reported in the production branch, the repository maintainers will follow the following process to triage, respond, and remediate:
 
-### 1. Validation
+### 1. Triage
 
 The first step is to find out the root cause, nature and scope of the vulnerability.
 
 - Find out who knows about the vulnerability and who is affected.
-- Find out what data was potentially exposed.
-- Optionally prove that the vulnerability can be exploited.
+- Find out what the impact of the vulnerability is, including potentially exposed data.
+- Perform root cause analysis and identify the best fix for the vulnerability.
 
 ### 2. Response
 
