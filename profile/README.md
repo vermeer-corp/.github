@@ -6,8 +6,8 @@
 
 ## View current Vermeer technology standards and migration information
 
-[Vermeer GitHub Standards and migration information](https://tldr.vermeer.com/docs/default/component/v-technology-standards/github/)   
-[Vermeer REST API Standards](https://tldr.vermeer.com/docs/default/component/v-technology-standards/rest-api/REST-API-development-standards/)   
+[Vermeer GitHub Standards and migration information](https://tldr.vermeer.com/docs/default/component/pt-software-engineering-resources/github/)   
+[Vermeer REST API Standards](https://tldr.vermeer.com/docs/default/component/pt-software-engineering-resources/rest-api/REST-API-development-standards/)   
 
 ## View the current Architecture Decision Records 
 
