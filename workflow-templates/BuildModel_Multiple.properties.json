@@ -1,0 +1,10 @@
+{
+  "name": "Build Multiple Simulink Controller Models",
+  "description": "Build multiple Simulink controller models in a single workflow.",
+  "categories": [
+    "Automation",
+    "continuous-integration",
+    "deployment",
+    "MATLAB"
+  ]
+}
