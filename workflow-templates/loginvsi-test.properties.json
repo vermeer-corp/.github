@@ -1,0 +1,6 @@
+{
+  "name": "LoginVSI Test",
+  "description": "Run a specified LoginVSI test and attach the results to the specified GitHub commit status and optionally email them to a specified address",
+  "iconName": "loginvsi",
+  "categories": ["deployment"]
+}
