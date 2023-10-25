@@ -1,0 +1,58 @@
+# To use:
+# The following needs to be configured for this template to work properly in
+#   production:
+#   Line 23 - name: Workflow name which appears under "Workflows" in the repo's
+#     Actions tab.
+#   Line 41 - name: Job name which appears under the Workflow.
+#   Line 49 - timeout-minutes: Maximum time the job is allowed to run before
+#     the job gives up.
+#   Line 51 - version: The version of MATLAB the models are saved in.
+#   Line 52 - project_path: The path to the parent project of the model to build.
+#   Line 53 - model: The name of the model to build.
+#   Line 54 - binary_path: Path to the binary that is generated after the model
+#     is built.
+#
+# Notes:
+# 1. Make sure to give this file a good name.
+# 2. All defined paths are relative to the root of the repository.
+# 3. For models that do not generate binaries (CodeGen only models), leave the
+#   binary path blank.
+# 4. Refer to https://docs.github.com/en/actions/learn-github-actions for more
+#   information.
+
+name: "" # Example: "Build BC Controller Model"
+on:
+  workflow_dispatch: # Manually trigger this workflow
+    # Prompts shown when manually triggering this workflow
+    inputs:
+      upload_codegen:
+        type: boolean
+        description: "True to upload the model's CodeGen folder as a workflow artifact."
+        default: false
+      push_build:
+        description: "True to commit the build files back into the branch."
+        type: boolean
+        default: false
+  push:
+    branches:
+      - 'release/**' # Always trigger workflow on push of a `release/* branch`
+jobs:
+  BuildModel:
+    name: "" # Example: "Build OCU"
+    runs-on: [Windows, matlab, self-hosted]
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref_name }}
+      cancel-in-progress: true
+    steps:
+      - name: Build the model
+        uses: vermeer-corp/eng-vme-actions/BuildModel@v2
+        timeout-minutes: 90 # Example: 90
+        with:
+          version: "" # Example: "2021b"
+          project_path: "" # Example: "BC_Software.prj"
+          model: "" # Example: "OCU"
+          binary_path: "" # Example: "Source/CodeToTarget/OCU/OCU.mcx"
+          upload_codegen: ${{ inputs.upload_codegen }}
+          push_build: ${{ inputs.push_build }}
+          write_token: ${{ secrets.GITHUB_TOKEN }}
+          read_token: ${{ secrets.VPACKAGE_ACCESS_PRIV_KEY }}

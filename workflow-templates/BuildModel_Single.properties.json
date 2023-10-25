@@ -1,0 +1,10 @@
+{
+  "name": "Build A Simulink Controller Model",
+  "description": "Build a Simulink controller model.",
+  "categories": [
+    "Automation",
+    "continuous-integration",
+    "deployment",
+    "MATLAB"
+  ]
+}

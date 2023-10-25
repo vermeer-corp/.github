@@ -112,3 +112,9 @@ CI/CD template for building, testing, and publishing .NET Framework NuGet packag
 CI/CD template for building, deploying, and managing the versions of Mendix Applicaiton Projects.
 
 **Use of this template requires the use of the _Build and Deploy on Mendix Cloud_ and the _Update Version Number of Mendix App_ template.**
+
+---
+
+### Industrial Systems Actions
+* Build A Simulink Controller Model
+* Build Multiple Simulink Controller Models
