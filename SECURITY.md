@@ -28,8 +28,10 @@ The first step is to find out the root cause, nature and scope of the vulnerabil
 
 ### 2. Response
 
-After the initial assessment and containment, a vulnerability response plan will be created and executed. Contact the vulnerability reporter and have them validate that the steps taken have resolved the vulnerability that was reported.
+After the initial assessment and containment, a vulnerability response plan will be created and executed to patch the vulnerable application.
 
 ### 3. Remediation
 
-Once the vulnerability is confirmed to be resolved, create a [GitHub Security Advisory](https://docs.github.com/en/code-security/security-advisories/about-github-security-advisories) in this repository using [this template](https://github.com/v-github-standards/tree/main/security/templates/AdvisoryTemplate.md) that summarizes the vulnerability, its scope, and what actions need to be taken by affected parties. If users outside of the Vermeer organization were potentially affected, post the security advisory in a public place accessible to those users or contact them directly.
+Deploy the patch to the production version of the affected software. Contact the vulnerability reporter and have them validate that the steps taken have resolved the vulnerability that was reported.
+
+If the affected code or software is distributed to parties outside of Vermeer, create a [GitHub Security Advisory](https://docs.github.com/en/code-security/security-advisories/about-github-security-advisories) in the repository using [this template](https://github.com/vermeer-corp/pt-software-engineering-resources/blob/main/docs/tech-docs/security/templates/AdvisoryTemplate.md) that summarizes the vulnerability, its scope, and what actions need to be taken by affected parties. Post the security advisory in a public place accessible to all affected parties or contact them directly.
