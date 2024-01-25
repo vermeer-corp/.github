@@ -1,15 +1,16 @@
 # To use:
 # The following needs to be configured for this template to work properly in
 #   production:
-#   Line 23 - name: Workflow name which appears under "Workflows" in the repo's
+#   Line 24 - name: Workflow name which appears under "Workflows" in the repo's
 #     Actions tab.
-#   Line 41 - name: Job name which appears under the Workflow.
-#   Line 49 - timeout-minutes: Maximum time the job is allowed to run before
+#   Line 42 - name: Job name which appears under the Workflow.
+#   Line 50 - timeout-minutes: Maximum time the job is allowed to run before
 #     the job gives up.
-#   Line 51 - version: The version of MATLAB the models are saved in.
-#   Line 52 - project_path: The path to the parent project of the model to build.
-#   Line 53 - model: The name of the model to build.
-#   Line 54 - binary_path: Path to the binary that is generated after the model
+#   Line 52 - version: The version of MATLAB the models are saved in.
+#   Line 53 - project: The name of the parent project of the model to
+#     build.
+#   Line 54 - model: The name of the model to build.
+#   Line 55 - binary_path: Path to the binary that is generated after the model
 #     is built.
 #
 # Notes:
@@ -45,11 +46,11 @@ jobs:
       cancel-in-progress: true
     steps:
       - name: Build the model
-        uses: vermeer-corp/eng-vme-actions/BuildModel@v2
+        uses: vermeer-corp/eng-vme-actions/BuildModel@v4
         timeout-minutes: 90 # Example: 90
         with:
           version: "" # Example: "2021b"
-          project_path: "" # Example: "BC_Software.prj"
+          project: "" # Example: "BC_Software.prj" or "BC_Software"
           model: "" # Example: "OCU"
           binary_path: "" # Example: "Source/CodeToTarget/OCU/OCU.mcx"
           upload_codegen: ${{ inputs.upload_codegen }}
