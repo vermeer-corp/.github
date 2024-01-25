@@ -3,15 +3,15 @@
 #   production:
 #   Line 32 - name: Workflow name which appears under "Workflows" in the repo's
 #     Actions tab.
-#   Line 55 - project_path: The path to the parent project of the first model
-#     to build.
+#   Line 55 - project: The name of the parent project of the first model to
+#     build.
 #   Line 56 - model: The name of the first model to build.
 #   Line 57 - binary_path: Path to the binary that is generated after the first
 #     model is built.
 #   Line 58 - timeout-minutes: Maximum time the first job is allowed to run
 #     before the job gives up.
-#   Line 59 - project_path: The path to the parent project of the n-th model
-#     to build.
+#   Line 59 - project: The name of the parent project of the n-th model to
+#     build.
 #   Line 60 - model: The name of the n-th model to build.
 #   Line 61 - binary_path: Path to the binary that is generated after the n-th
 #     model is built.
@@ -52,21 +52,21 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - project_path: "" # Example: "PD_Software.prj"
+          - project: "" # Example: "PD_Software.prj" or "PD_Software"
             model: "" # Example: "PCU"
             binary_path: "" # Example: "Applications/PCU/PCU.mcx"
             timeout-minutes: 90 # Example: 90
-          - project_path: "" # Example: "PD_Software.prj"
+          - project: "" # Example: "PD_Software.prj" or "PD_Software"
             model: "" # Example: "MCU"
             binary_path: "" # Example: "Applications/MCU/MCU.mcx"
             timeout-minutes: 30 # Example: 30
     steps:
       - name: Build ${{ matrix.model }}
-        uses: vermeer-corp/eng-vme-actions/BuildModel@v2
+        uses: vermeer-corp/eng-vme-actions/BuildModel@v4
         timeout-minutes: ${{ matrix.timeout-minutes }}
         with:
           version: "" # Example: "2021b"
-          project_path: ${{ matrix.project_path }}
+          project: ${{ matrix.project }}
           model: ${{ matrix.model }}
           binary_path: ${{ matrix.binary_path }}
           upload_codegen: ${{ inputs.upload_codegen }}
