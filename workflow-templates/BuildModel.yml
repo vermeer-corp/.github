@@ -1,0 +1,170 @@
+# To use:
+# The following needs to be configured for this template to work properly in
+#   production:
+#   Line 56 - name: Workflow name which appears under "Workflows" in the repo's
+#     Actions tab.
+#   Line 66 - choice: Name of a specific model to build. More options can be
+#     added.
+#   Line 77 - branches: Name of the base branch for PRs that will trigger this
+#     workflow. Normally this is just the default branch, but more can be
+#     defined.
+#   Lines 79 to 82: Uncomment to enable scheduled builds.
+#   Lines 151 to 163: Definition of the build configuration(s) for a model. The
+#     following can be configured:
+#     Line 151: Name of a model build configuration. Must match added model
+#       names defined on and after line 66.
+#     Line 153 - project: The path to the parent project of the model to build.
+#     Line 154 - model: The name of the Simulink model to build.
+#     Line 155 - version: The version of MATLAB the model is saved in.
+#     Line 156 - timeout_minutes: Maximum time a model build job is allowed to
+#       run before the job gives up.
+#     Line 157 - os: Runner OS required for building models and generating code.
+#       If blank or not defined, defaults to ["Windows"]. This JSON element is
+#       optional and can be removed if not needed.
+#     Line 158 - labels: Labels required for building models and generating code
+#       other than ["self-hosted", "matlab"]. This JSON element is optional and
+#       can be removed if not needed.
+#     Line 159 - build_cmd: Custom MATLAB command to run to build a model in a
+#       project. This JSON element is optional and can be removed if not needed.
+#     Line 160 - binary: Path to the binary that is generated after a model is
+#       built and artifacts have been uploaded. This JSON element is optional
+#       and can be removed if not needed.
+#     Line 161 - post_build_action: Composite action to run after Simulink
+#       code-gen/compilation has succeeded. If defined, this composite action
+#       must have the following as inputs:
+#         1) version - string: Version of MATLAB to use.
+#         2) project - string: Name of the project to run post-build steps for.
+#         3) model - string: Name of the controller model to run post-build
+#           steps for.
+#         4) read_token - string: Access token for read access to all Vermeer
+#           repositories.
+#         5) write_token - string: Access token for write access to the project
+#           repository.
+#       For an example of an implementation that could exist in a project
+#       repository, see:
+#         https://github.com/vermeer-corp/eng-vme-actions/tree/main/BuildModel/PostBuildGrayhillDisplayExample/action.yml
+#       This JSON element is optional and can be removed if not needed.
+#
+# Notes:
+# 1. Save this file in a ".github/workflows" directory in the root of the
+#   repository.
+# 2. Make sure to change this file extension to yml and give it a good name.
+# 3. All paths defined are relative to the root of the repository.
+# 4. Refer to https://docs.github.com/en/actions/learn-github-actions for more
+#   information.
+
+name: "" # Example: "Build Models"
+on:
+  workflow_dispatch: # Manually trigger this workflow
+    # Prompts shown when manually triggering this workflow
+    inputs:
+      model:
+        type: choice
+        description: "Model to build"
+        options:
+          - "All"
+          - "" # Example: "OCU"
+      upload_codegen:
+        description: "True to upload the model's CodeGen folder as a workflow artifact."
+        type: boolean
+        default: false
+      push_build:
+        description: "True to commit the build files back into the branch."
+        type: boolean
+        default: false
+  pull_request:
+    branches:
+      - "" # Example: "main"
+  # Uncomment to enable scheduled builds
+  # schedule:
+  #   # To create a custom schedule, see
+  #   # https://docs.github.com/en/enterprise-cloud@latest/actions/using-workflows/events-that-trigger-workflows#schedule
+  #   - cron: '0 5 * * 1-5' # Monday-Friday at 5am UTC (midnight CST)
+
+jobs:
+  BuildModel:
+    name: ${{ format('Build {0}', inputs.model || 'Models') }}
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+      cancel-in-progress: true
+    uses: vermeer-corp/eng-vme-actions/.github/workflows/build_model_reusable.yml@v5
+    with:
+      # Example single application platform config (no binary):
+      #   {
+      #     "OCU": [
+      #       {
+      #         "project": "CTX_Software.prj",
+      #         "model": "OCU",
+      #         "version": "2023a",
+      #         "timeout_minutes": "20"
+      #       }
+      #     ]
+      #   }
+      #
+      # Example single application, multiple-target platform config:
+      #   {
+      #     "OCU": [
+      #       {
+      #         "project": "SC_Software.prj",
+      #         "model": "OCU_CMC",
+      #         "version": "2021b",
+      #         "timeout_minutes": "45",
+      #         "binary": "Source/CodeToTarget/OCU_CMC/OCU_CMC.hex"
+      #       },
+      #       {
+      #         "project": "SC_Software.prj",
+      #         "model": "OCU_MCx",
+      #         "version": "2021b",
+      #         "timeout_minutes": "45",
+      #         "binary": "Source/CodeToTarget/OCU_MCx/OCU_MCx.mcx"
+      #       }
+      #     ]
+      #   }
+      #
+      # Example multiple application platform config:
+      #   {
+      #     "MCU": [
+      #       {
+      #         "project": "Vermeer_PD25_Software",
+      #         "model": "MCU",
+      #         "version": "2021b",
+      #         "timeout_minutes": "30",
+      #         "build_cmd": "addpath(fullfile(pwd, '.github', 'workflows')); SimulinkModelCompile('MCU');",
+      #         "binary": "Applications/MCU/MCU.mcx"
+      #       }
+      #     ],
+      #     "ODU": [
+      #       {
+      #         "project": "Vermeer_PD25_Software",
+      #         "model": "ODU",
+      #         "version": "2021b",
+      #         "timeout_minutes": "90",
+      #         "labels": ["qt"],
+      #         "build_cmd": "addpath(fullfile(pwd, '.github','workflows')); SimulinkModelCompile('ODU');",
+      #         "binary": "",
+      #         "post_build_action": ".github/actions/post_build_display",
+      #       }
+      #     ]
+      #   }
+      model_configs: |
+        {
+          "": [
+            {
+              "project": "",
+              "model": "",
+              "version": "",
+              "timeout_minutes": "",
+              "os": [""],
+              "labels": [""],
+              "build_cmd": "",
+              "binary": "",
+              "post_build_action": ""
+            }
+          ]
+        }
+      model: ${{ inputs.model }}
+      upload_codegen: ${{ inputs.upload_codegen }}
+      push_build: ${{ inputs.push_build }}
+    secrets:
+      read_token: ${{ secrets.VPACKAGE_ACCESS_PRIV_KEY }}
+      write_token: ${{ secrets.GITHUB_TOKEN }}
