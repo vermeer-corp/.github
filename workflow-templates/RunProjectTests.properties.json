@@ -1,0 +1,10 @@
+{
+  "name": "Run Simulink Project Tests",
+  "description": "Run `Vermeer_Test_Tools` unit tests defined in a Simulink project.",
+  "categories": [
+    "Automation",
+    "continuous-integration",
+    "deployment",
+    "MATLAB"
+  ]
+}

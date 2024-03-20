@@ -1,0 +1,10 @@
+{
+  "name": "Build Simulink Controller Models",
+  "description": "Build one or more Simulink controller models defined in a repository.",
+  "categories": [
+    "Automation",
+    "continuous-integration",
+    "deployment",
+    "MATLAB"
+  ]
+}

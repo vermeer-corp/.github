@@ -1,0 +1,42 @@
+# To use:
+# The following needs to be configured for this template to work properly in
+#   production:
+#   Line 21 - name: Workflow name which appears under "Workflows" in the repo's
+#     Actions tab.
+#   Line 28 - branches: Name of the default branch, or target branch(es) for
+#     pull requests, for this repository.
+#   Line 38 - version: The version of MATLAB the models are saved in.
+#   Line 39 - project: The name of the MATLAB project to run tests for.
+#   Line 40 - timeout_minutes: Maximum time a run tests job is allowed to run
+#     before the job gives up.
+#
+# Notes:
+# 1. Save this file in a ".github/workflows" directory in the root of the
+#   repository.
+# 2. Make sure to change this file extension to "yml" and give it a good name.
+# 3. All defined paths are relative to the root of the repository.
+# 4. Refer to https://docs.github.com/en/actions/learn-github-actions for more
+#   information.
+
+name: "" # Example: "Run Project Tests"
+on:
+  # Allow manual triggering of workflow
+  workflow_dispatch:
+  # Run on PR open, reopen, or synchronize when the target is the defined branch
+  pull_request:
+    branches:
+      - "" # Example: "main"
+
+jobs:
+  RunProjectTests:
+    name: Run Project Tests
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+      cancel-in-progress: true
+    uses: vermeer-corp/eng-vme-actions/.github/workflows/run_project_tests_reusable.yml@v5
+    with:
+      version: "" # Example: "2023a"
+      project: "" # Example: "CTX_Software.prj" or "CTX_Software"
+      timeout_minutes: "" # Example: "15"
+    secrets:
+      read_token: ${{ secrets.VPACKAGE_ACCESS_PRIV_KEY }}
