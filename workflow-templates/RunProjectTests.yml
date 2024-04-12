@@ -1,15 +1,17 @@
 # To use:
 # The following needs to be configured for this template to work properly in
 #   production:
-#   Line 23 - name: Workflow name which appears under "Workflows" in the repo's
+#   Line 25 - name: Workflow name which appears under "Workflows" in the repo's
 #     Actions tab.
-#   Line 30 - branches: Name of the default branch, or target branch(es) for
+#   Line 37 - base_branch: Default name of the branch to compare changed files
+#     to.
+#   Line 41 - branches: Name of the default branch, or target branch(es) for
 #     pull requests, for this repository.
-#   Line 40 - version: The version of MATLAB the models are saved in.
-#   Line 41 - project: The name of the MATLAB project to run tests for.
-#   Line 42 - timeout_minutes: Maximum time a run tests job is allowed to run
+#   Line 51 - version: The version of MATLAB the models are saved in.
+#   Line 52 - project: The name of the MATLAB project to run tests for.
+#   Line 53 - timeout_minutes: Maximum time a run tests job is allowed to run
 #     before the job gives up.
-#   Line 43 - status_check: True to use this workflow as a Status Check. This
+#   Line 54 - status_check: True to use this workflow as a Status Check. This
 #     input is optional and defaults to `true` if undefined.
 #
 # Notes:
@@ -22,8 +24,17 @@
 
 name: "" # Example: "Run Project Tests"
 on:
-  # Allow manual triggering of workflow
-  workflow_dispatch:
+  workflow_dispatch: # Manually trigger this workflow
+    # Prompts shown when manually triggering this workflow
+    inputs:
+      test_all:
+        description: "Run all tests regardless of files changed."
+        type: boolean
+        default: true
+      base_branch:
+        description: "If `test_all` is false, name of the branch to compare files to. Typically, this is the repository's default branch. If blank, this workflow will compare the HEAD commit of the branch being executed to the previous commit of the same branch."
+        type: string
+        default: "" # Example: "main"
   # Run on PR open, reopen, or synchronize when the target is the defined branch
   pull_request:
     branches:
@@ -41,5 +52,7 @@ jobs:
       project: "" # Example: "CTX_Software.prj" or "CTX_Software"
       timeout_minutes: "" # Example: "15"
       status_check: "" # Example: "false"
+      test_all: ${{ inputs.test_all }}
+      base_branch: ${{ inputs.base_branch }}
     secrets:
       read_token: ${{ secrets.VPACKAGE_ACCESS_PRIV_KEY }}
