@@ -119,27 +119,12 @@ CI/CD template for building, deploying, and managing the versions of Mendix Appl
 <img src="./workflow-templates/vermeer.svg" title="Vermeer" alt="Vermeer" width="64"/>
 
 #### Build Simulink Controller Models
-Build one or more Simulink controller models defined in a repository. By default, this workflow can be configured to run when the following events happen:
-- [Workflow Dispatch][github-event-workflow_dispatch]: Manual execution of the workflow on a specified branch. This event will build all models specified in the workflow configuration.
-- [Pull Request][github-event-pull_request] to specified branch: `opened`, `synchronize`, or `reopened` activity types. This event will only attempt to build models that have been affected by files changed in the PR or when the workflow configuration changes.
-- [Schedule][github-event-schedule]: Build all specified models nightly, Monday through Friday. This event will build all models specified in the workflow configuration.
+Build one or more Simulink controller models defined in a repository.
 
 #### Run Simulink Project Tests
-Run `Vermeer_Test_Tools` unit tests defined in a Simulink project. By default, this workflow can be configured to run when the following events happen:
-- [Workflow Dispatch][github-event-workflow_dispatch]: Manual execution of the workflow on a specified branch.
-- [Pull Request][github-event-pull_request] to specified branch: `opened`, `synchronize`, or `reopened` activity types.
+Run `Vermeer_Test_Tools` unit tests defined in a Simulink project.
 
 #### Build Simulink Library
-Create a distributable version of a Simulink library that can be imported as a submodule for Simulink projects. By default, this workflow can be configured to run when the following events happen:
-- [Workflow Dispatch][github-event-workflow_dispatch]: Manual execution of the workflow on a specified branch.
-- [Push][github-event-push] to a non-`dist` branch.
-
-[github-event-workflow_dispatch]: https://docs.github.com/en/enterprise-cloud@latest/actions/using-workflows/events-that-trigger-workflows#workflow_dispatch
-
-[github-event-pull_request]: https://docs.github.com/en/enterprise-cloud@latest/actions/using-workflows/events-that-trigger-workflows#pull_request
-
-[github-event-schedule]: https://docs.github.com/en/enterprise-cloud@latest/actions/using-workflows/events-that-trigger-workflows#schedule
-
-[github-event-push]: https://docs.github.com/en/enterprise-cloud@latest/actions/using-workflows/events-that-trigger-workflows#push
+Create a distributable version of a Simulink library that can be imported as a submodule for Simulink projects.
 
 ---
