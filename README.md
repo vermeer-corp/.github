@@ -121,10 +121,13 @@ CI/CD template for building, deploying, and managing the versions of Mendix Appl
 #### Build Simulink Controller Models
 Build one or more Simulink controller models defined in a repository.
 
-#### Run Simulink Project Tests
-Run `Vermeer_Test_Tools` unit tests defined in a Simulink project.
-
 #### Build Simulink Library
 Create a distributable version of a Simulink library that can be imported as a submodule for Simulink projects.
+
+#### Export Simulink Project
+Export a Simulink project to a format for distribution to other Simulink projects.
+
+#### Run Simulink Project Tests
+Run `Vermeer_Test_Tools` unit tests defined in a Simulink project.
 
 ---
