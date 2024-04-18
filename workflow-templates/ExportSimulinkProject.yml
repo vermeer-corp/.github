@@ -1,0 +1,65 @@
+# To use:
+# The following needs to be configured for this template to work properly in
+#   production:
+#   Line 31 - name:  Workflow name which appears under "Workflows" in the repo's
+#     Actions tab.
+#   Line 55 - version: The version of MATLAB the project is saved in.
+#   Line 56 - root_project: The name of the MATLAB project containing the
+#     project to export.
+#   Line 57 - export_project: Name of the MATLAB sub-project of `root_project`
+#     to export.
+#   Line 58 - required_labels: A list of runner labels required to export the
+#     project other than ["self-hosted", "Windows", "matlab"]. This property is
+#     not required and can be removed if the default labels are enough to export
+#     the project.
+#   Line 59 - timeout_minutes: Maximum time a project export job is allowed to
+#     run before the job gives up. Defaults to `10` if undefined.
+#   Line 60 - status_check: True to use this workflow as a Status Check. This
+#     input is optional and defaults to `true` if undefined.
+#   Line 61: export_profile: Default name of the profile to export the project
+#     with. See https://www.mathworks.com/help/matlab/ref/matlab.project.project.export.html#mw_4da5d920-ce4a-4e92-bdb8-65485c22c9bb.
+#
+# Notes:
+# 1. This workflow will fail if exporting a project not saved in MATLAB 2023a or
+#   later.
+# 2. Save this file in a ".github/workflows" directory in the root of the
+#   repository.
+# 3. Make sure to change this file extension to yml and give it a good name.
+# 4. Refer to https://docs.github.com/en/actions/learn-github-actions for more
+#   information.
+
+name: "" # Example: "Export Simulink Project"
+on:
+  workflow_dispatch:
+    inputs:
+      override_push:
+        description: "Push to an output branch even when the source is not main."
+        type: boolean
+        default: true
+      export_profile:
+        description: "The name of the profile to export the project with. If blank, defaults to the workflow default."
+        type: string
+  push:
+    branches-ignore:
+      - '**dist'
+      - '**Dist'
+
+jobs:
+  ExportSimulinkProject:
+    name: Export Simulink Project
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+      cancel-in-progress: true
+    uses: vermeer-corp/eng-vme-actions/.github/workflows/export_simulink_project_reusable.yml@v5
+    with:
+      version: "" # Example: "2023a"
+      root_project: "" # Example: "eng_vme2_maintenancereminder_library"
+      export_project: "" # Example: "Vermeer_MaintenanceReminder_Library"
+      required_labels: "" # Example: "'qt', 'matlab-coder'"
+      timeout_minutes: "" # Example: "15"
+      status_check: "" # Example: "false"
+      export_profile: ${{ inputs.export_profile || '' }} # Example: 'dist'
+      override_push: ${{ inputs.override_push }}
+    secrets:
+      read_token: ${{ secrets.VPACKAGE_ACCESS_PRIV_KEY }}
+      write_token: ${{ secrets.GITHUB_TOKEN }}
