@@ -1,0 +1,42 @@
+# To use:
+# The following needs to be configured for this template to work properly in
+#   production:
+#   Line 20 - name:  Workflow name which appears under "Workflows" in the repo's
+#     Actions tab.
+#   Line 31 - name: Job name which appears under the Workflow.
+#
+# Notes:
+# 1. Save this file in a ".github/workflows" directory in the root of the
+#   repository.
+# 2. Make sure to change this file extension to yml and give it a good name.
+# 3. To deploy documentation in a repository to TLDR/TechDocs, there must exist
+#   a valid "mkdocs.yml" in the repository's root and a valid
+#   "tldr/catalog-info.yaml" file.
+# 4. Refer to https://tldr.vermeer.com/docs/default/Component/pt-backstage/ for
+#   more information on IT's TLDR and TechDocs system.
+# 5. Refer to https://docs.github.com/en/actions/learn-github-actions for more
+#   information about GitHub Actions.
+
+name: "" # Example: "Deploy To TechDocs"
+on:
+  # Manually trigger this workflow
+  workflow_dispatch:
+  # Trigger on pushes to the defined branch(es)
+  push:
+    branches:
+      - main
+
+jobs:
+  Deploy:
+    name: "" # Example: "Deploy"
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref_name }}
+      cancel-in-progress: true
+    steps:
+      - name: Deploy to TechDocs
+        uses: vermeer-corp/eng-vme-actions/DeployToTechDocs@v5
+        with:
+          azure_container_name: ${{ secrets.AZURE_TECHDOCS_CONTAINER_NAME }}
+          azure_client_id: ${{ secrets.AZURE_TECHDOCS_CLIENT_ID }}
+          azure_client_key: ${{ secrets.AZURE_TECHDOCS_CLIENT_KEY }}

@@ -1,0 +1,10 @@
+{
+  "name": "Deploy To TechDocs",
+  "description": "Set up and deploy a VME repository's MkDocs documentation to TLDR's TechDocs component.",
+  "categories": [
+    "Automation",
+    "continuous-integration",
+    "deployment",
+    "documentation"
+  ]
+}
