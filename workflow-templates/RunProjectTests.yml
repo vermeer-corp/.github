@@ -3,7 +3,7 @@
 #   production:
 #   Line 25 - name: Workflow name which appears under "Workflows" in the repo's
 #     Actions tab.
-#   Line 37 - base_branch: Default name of the branch to compare changed files
+#   Line 37 - base_branch: Name of the default branch to compare changed files
 #     to.
 #   Line 41 - branches: Name of the default branch, or target branch(es) for
 #     pull requests, for this repository.

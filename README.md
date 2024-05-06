@@ -124,6 +124,9 @@ Build one or more Simulink controller models defined in a repository.
 #### Build Simulink Library
 Create a distributable version of a Simulink library that can be imported as a submodule for Simulink projects.
 
+#### Deploy to TechDocs
+Set up and deploy a VME repository's MkDocs documentation to TLDR's TechDocs component.
+
 #### Export Simulink Project
 Export a Simulink project to a format for distribution to other Simulink projects.
 

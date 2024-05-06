@@ -1,35 +1,35 @@
 # To use:
 # The following needs to be configured for this template to work properly in
 #   production:
-#   Line 58 - name: Workflow name which appears under "Workflows" in the repo's
+#   Line 64 - name: Workflow name which appears under "Workflows" in the repo's
 #     Actions tab.
-#   Line 68 - choice: Name of a specific model to build. More options can be
+#   Line 74 - choice: Name of a specific model to build. More options can be
 #     added.
-#   Line 79 - branches: Name of the base branch for PRs that will trigger this
+#   Line 85 - branches: Name of the base branch for PRs that will trigger this
 #     workflow. Normally this is just the default branch, but more can be
 #     defined.
-#   Lines 81 to 84: Uncomment to enable scheduled builds.
-#   Lines 153 to 165: Definition of the build configuration(s) for a model. The
+#   Lines 87 to 90: Uncomment to enable scheduled builds.
+#   Lines 160 to 173: Definition of the build configuration(s) for a model. The
 #     following can be configured:
-#     Line 153: Name of a model build configuration. Must match added model
+#     Line 160: Name of a model build configuration. Must match added model
 #       names defined on and after line 66.
-#     Line 155 - project: The path to the parent project of the model to build.
-#     Line 156 - model: The name of the Simulink model to build.
-#     Line 157 - version: The version of MATLAB the model is saved in.
-#     Line 158 - timeout_minutes: Maximum time a model build job is allowed to
+#     Line 162 - project: The path to the parent project of the model to build.
+#     Line 163 - model: The name of the Simulink model to build.
+#     Line 164 - version: The version of MATLAB the model is saved in.
+#     Line 165 - timeout_minutes: Maximum time a model build job is allowed to
 #       run before the job gives up.
-#     Line 159 - os: Runner OS required for building models and generating code.
+#     Line 166 - os: Runner OS required for building models and generating code.
 #       If blank or not defined, defaults to ["Windows"]. This JSON element is
 #       optional and can be removed if not needed.
-#     Line 160 - labels: Labels required for building models and generating code
+#     Line 167 - labels: Labels required for building models and generating code
 #       other than ["self-hosted", "matlab"]. This JSON element is optional and
 #       can be removed if not needed.
-#     Line 161 - build_cmd: Custom MATLAB command to run to build a model in a
+#     Line 168 - build_cmd: Custom MATLAB command to run to build a model in a
 #       project. This JSON element is optional and can be removed if not needed.
-#     Line 162 - binary: Path to the binary that is generated after a model is
+#     Line 169 - binary: Path to the binary that is generated after a model is
 #       built and artifacts have been uploaded. This JSON element is optional
 #       and can be removed if not needed.
-#     Line 163 - post_build_action: Composite action to run after Simulink
+#     Line 170 - post_build_action: Composite action to run after Simulink
 #       code-gen/compilation has succeeded. If defined, this composite action
 #       must have the following as inputs:
 #         1) version - string: Version of MATLAB to use.
@@ -44,7 +44,13 @@
 #       repository, see:
 #         https://github.com/vermeer-corp/eng-vme-actions/tree/main/BuildModel/PostBuildGrayhillDisplayExample/action.yml
 #       This JSON element is optional and can be removed if not needed.
-#   Line 167 - status_check: True to use this workflow as a Status Check. This
+#     Line 171 - external_dependencies: Additional `git diff` arguments that, if
+#       modified, forces a model build. This is particularly useful when
+#       `post_build_action` is defined and a PR modifies files that wouldn't
+#       necessarily trigger a model build, but `post_build_action` would be
+#       expected to. This JSON element is optional and can be removed if not
+#       needed.
+#   Line 175 - status_check: True to use this workflow as a Status Check. This
 #     input is optional and defaults to `true` if undefined.
 #
 # Notes:
@@ -87,7 +93,7 @@ jobs:
   BuildModel:
     name: ${{ format('Build {0}', inputs.model || 'Models') }}
     concurrency:
-      group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+      group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}-${{ inputs.model || 'all-auto' }}
       cancel-in-progress: true
     uses: vermeer-corp/eng-vme-actions/.github/workflows/build_model_reusable.yml@v5
     with:
@@ -145,6 +151,7 @@ jobs:
       #         "build_cmd": "addpath(fullfile(pwd, '.github','workflows')); SimulinkModelCompile('ODU');",
       #         "binary": "",
       #         "post_build_action": ".github/actions/post_build_display",
+      #         "external_dependencies": ["Applications/ODU", "Libraries/Vermeer_Qt_Gauges"]
       #       }
       #     ]
       #   }
@@ -160,7 +167,8 @@ jobs:
               "labels": [""],
               "build_cmd": "",
               "binary": "",
-              "post_build_action": ""
+              "post_build_action": "",
+              "external_dependencies": [""]
             }
           ]
         }
