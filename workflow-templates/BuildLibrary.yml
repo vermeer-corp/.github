@@ -1,17 +1,20 @@
 # To use:
 # The following needs to be configured for this template to work properly in
 #   production:
-#   Line 24 - name: Workflow name which appears under "Workflows" in the repo's
+#   Line 27 - name: Workflow name which appears under "Workflows" in the repo's
 #     Actions tab.
-#   Line 45 - version: The version of MATLAB the library is saved in.
-#   Line 46 - project: The name of the MATLAB project for the library to build.
-#   Line 47 - required_labels: A list of runner labels required to build the
+#   Line 48 - version: The version of MATLAB the library is saved in.
+#   Line 49 - project: The name of the MATLAB project for the library to build.
+#   Line 50 - required_labels: A list of runner labels required to build the
 #     library other than ["self-hosted", "Windows", "matlab"]. This property is
 #     not required and can be removed if the default labels are enough to build
 #     the library.
-#   Line 48 - timeout_minutes: Maximum time a library build job is allowed to
+#   Line 51 - timeout_minutes: Maximum time a library build job is allowed to
 #     run before the job gives up.
-#   Line 49 - status_check: True to use this workflow as a Status Check. This
+#   Line 52 - run_cmd: Custom MATLAB command to run to build a library. This
+#     input element is optional and if undefined, the default eng-vme-actions
+#     MATLAB command to build a library will be ran.
+#   Line 53 - status_check: True to use this workflow as a Status Check. This
 #     input is optional and defaults to `true` if undefined.
 #
 # Notes:
@@ -26,7 +29,7 @@ on:
   workflow_dispatch:
     inputs:
       override_push:
-        description: "Select this option to force push an output branch even when the source is not main."
+        description: "Select this option to force push an output branch even when the source is not the default branch."
         type: boolean
         default: false
   push:
@@ -46,6 +49,7 @@ jobs:
       project: "" # Example: "Vermeer_Base_Library"
       required_labels: "" # Example: "'qt', 'matlab-coder'"
       timeout_minutes: "" # Example: "15"
+      run_cmd: "" # Example: "addpath(fullfile(pwd)); BuildLibrary('VME3_OS_Library');"
       status_check: "" # Example: "false"
       override_push: ${{ inputs.override_push }}
     secrets:
