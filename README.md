@@ -116,21 +116,35 @@ CI/CD template for building, deploying, and managing the versions of Mendix Appl
 ---
 
 ### Vermeer Industrial Systems Actions
+
 <img src="./workflow-templates/vermeer.svg" title="Vermeer" alt="Vermeer" width="64"/>
 
 #### Build Simulink Controller Models
+
 Build one or more Simulink controller models defined in a repository.
 
 #### Build Simulink Library
+
 Create a distributable version of a Simulink library that can be imported as a submodule for Simulink projects.
 
 #### Deploy to TechDocs
+
 Set up and deploy a VME repository's MkDocs documentation to TLDR's TechDocs component.
 
 #### Export Simulink Project
+
 Export a Simulink project to a format for distribution to other Simulink projects.
 
+#### Prettier Code Format
+
+Run the opinionated code formatter Prettier on repository files, adding a default config if necessary.
+
+#### Reload Model Parameters
+
+Reload parameters in one or more Simulink models defined in a repository.
+
 #### Run Simulink Project Tests
+
 Run `Vermeer_Test_Tools` unit tests defined in a Simulink project.
 
 ---
