@@ -1,0 +1,47 @@
+# To use:
+# The following needs to be configured for this starter workflow to work
+#   properly in production:
+#   Line 23 - name: Workflow name which appears under "Workflows" in the repo's
+#     Actions tab.
+#   Line 31 - paths: Set the paths for which changes trigger this workflow. More
+#     paths can be added.
+#   Line 41 - version: Version of MATLAB to use.
+#   Line 42 - project: Name of the project the models are in.
+#   Line 43 - models: A comma-separated list of model names to reload parameters
+#     for.
+#   Line 44 - timeout_minutes: Maximum time a project export job is allowed to run
+#     before the job gives up. Defaults to `20` if undefined.
+#
+# Notes:
+# 1. Save this file in a ".github/workflows" directory in the root of the
+#   repository.
+# 2. Make sure to change this file extension to yml and give it a good name.
+# 3. All paths defined are relative to the root of the repository.
+# 4. Refer to https://docs.github.com/en/actions/learn-github-actions for more
+#   information.
+
+name: "" # Example: "Reload Model Parameters"
+on:
+  # Manually trigger this workflow
+  workflow_dispatch:
+  # Run on PR open, reopen, or synchronize
+  pull_request:
+    # Paths to trigger workflow from pull request
+    paths:
+      - "" # Example: "Common/Dictionary/PDParameters.xlsx"
+
+jobs:
+  ReloadModelParameters:
+    name: Reload Model Parameters
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+      cancel-in-progress: true
+    uses: vermeer-corp/eng-vme-actions/.github/workflows/reload_model_parameters_reusable.yml@v5
+    with:
+      version: "" # Example: "2021b"
+      project: "" # Example: "Vermeer_PD_Features.prj" or "Vermeer_PD_Features"
+      models: "" # Example: "OCU" or "ACUParameters_MT.slx, ODUParams_MT.slx, PCUParams_MT.slx"
+      timeout_minutes: "" # Example: "15"
+    secrets:
+      read_token: ${{ secrets.VPACKAGE_ACCESS_PRIV_KEY }}
+      write_token: ${{ secrets.GITHUB_TOKEN }}

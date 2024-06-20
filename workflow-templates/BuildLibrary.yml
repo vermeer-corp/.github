@@ -1,6 +1,6 @@
 # To use:
-# The following needs to be configured for this template to work properly in
-#   production:
+# The following needs to be configured for this starter workflow to work
+#   properly in production:
 #   Line 27 - name: Workflow name which appears under "Workflows" in the repo's
 #     Actions tab.
 #   Line 48 - version: The version of MATLAB the library is saved in.
@@ -31,7 +31,7 @@ on:
       override_push:
         description: "Select this option to force push an output branch even when the source is not the default branch."
         type: boolean
-        default: false
+        default: true
   push:
     branches-ignore:
       - '**dist'

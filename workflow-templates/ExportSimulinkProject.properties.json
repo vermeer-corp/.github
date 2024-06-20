@@ -1,6 +1,6 @@
 {
   "name": "Export Simulink Project",
-  "description": "Export a Simulink project to a format for distribution to other Simulink projects.",
+  "description": "Export a MATLAB project to a format for distribution to other MATLAB projects.",
   "categories": [
     "Automation",
     "continuous-integration",
