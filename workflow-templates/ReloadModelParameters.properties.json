@@ -1,10 +1,5 @@
 {
   "name": "Reload Model Parameters",
   "description": "Reload parameters in one or more Simulink models defined in a repository.",
-  "categories": [
-    "Automation",
-    "continuous-integration",
-    "deployment",
-    "MATLAB"
-  ]
+  "categories": ["Automation", "continuous-integration", "deployment", "MATLAB"]
 }
