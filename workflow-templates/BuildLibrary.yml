@@ -34,8 +34,8 @@ on:
         default: true
   push:
     branches-ignore:
-      - '**dist'
-      - '**Dist'
+      - "**dist"
+      - "**Dist"
 
 jobs:
   BuildLibrary:

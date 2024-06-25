@@ -1,10 +1,5 @@
 {
   "name": "Build Simulink Library",
   "description": "Create a distributable version of a Simulink library that can be imported as a submodule for MATLAB projects.",
-  "categories": [
-    "Automation",
-    "continuous-integration",
-    "deployment",
-    "MATLAB"
-  ]
+  "categories": ["Automation", "continuous-integration", "deployment", "MATLAB"]
 }

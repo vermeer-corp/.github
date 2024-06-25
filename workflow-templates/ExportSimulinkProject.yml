@@ -45,8 +45,8 @@ on:
         type: string
   push:
     branches-ignore:
-      - '**dist'
-      - '**Dist'
+      - "**dist"
+      - "**Dist"
 
 jobs:
   ExportSimulinkProject:
