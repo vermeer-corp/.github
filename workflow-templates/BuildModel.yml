@@ -5,31 +5,31 @@
 #     Actions tab.
 #   Line 76 - choice: Name of a specific model to build. More options can be
 #     added.
-#   Line 87 - branches: Name of the base branch for PRs that will trigger this
+#   Line 90 - branches: Name of the base branch for PRs that will trigger this
 #     workflow. Normally this is just the default branch, but more can be
 #     defined.
-#   Lines 89 to 92: Uncomment to enable scheduled builds.
-#   Lines 162 to 175: Definition of the build configuration(s) for a model. The
+#   Lines 92 to 95: Uncomment to enable scheduled builds.
+#   Lines 165 to 178: Definition of the build configuration(s) for a model. The
 #     following can be configured:
-#     Line 162: Name of a model build configuration. Must match added model
+#     Line 165: Name of a model build configuration. Must match added model
 #       names defined on and after line 66.
-#     Line 164 - project: The path to the parent project of the model to build.
-#     Line 165 - model: The name of the Simulink model to build.
-#     Line 166 - version: The version of MATLAB the model is saved in.
-#     Line 167 - timeout_minutes: Maximum time a model build job is allowed to
+#     Line 167 - project: The path to the parent project of the model to build.
+#     Line 168 - model: The name of the Simulink model to build.
+#     Line 169 - version: The version of MATLAB the model is saved in.
+#     Line 170 - timeout_minutes: Maximum time a model build job is allowed to
 #       run before the job gives up.
-#     Line 168 - os: Runner OS required for building models and generating code.
+#     Line 171 - os: Runner OS required for building models and generating code.
 #       If blank or not defined, defaults to ["Windows"]. This JSON element is
 #       optional and can be removed if not needed.
-#     Line 169 - labels: Labels required for building models and generating code
+#     Line 172 - labels: Labels required for building models and generating code
 #       other than ["self-hosted", "matlab"]. This JSON element is optional and
 #       can be removed if not needed.
-#     Line 170 - build_cmd: Custom MATLAB command to run to build a model in a
+#     Line 173 - build_cmd: Custom MATLAB command to run to build a model in a
 #       project. This JSON element is optional and can be removed if not needed.
-#     Line 171 - binary: Path to the binary that is generated after a model is
+#     Line 174 - binary: Path to the binary that is generated after a model is
 #       built and artifacts have been uploaded. This JSON element is optional
 #       and can be removed if not needed.
-#     Line 172 - post_build_action: Composite action to run after Simulink
+#     Line 175 - post_build_action: Composite action to run after Simulink
 #       code-gen/compilation has succeeded. If defined, this composite action
 #       must have the following as inputs:
 #         1) version - string: Version of MATLAB to use.
@@ -44,13 +44,13 @@
 #       repository, see:
 #         https://github.com/vermeer-corp/eng-vme-actions/tree/main/BuildModel/PostBuildGrayhillDisplayExample/action.yml
 #       This JSON element is optional and can be removed if not needed.
-#     Line 173 - external_dependencies: Additional `git diff` arguments that, if
+#     Line 176 - external_dependencies: Additional `git diff` arguments that, if
 #       modified, forces a model build. This is particularly useful when
 #       `post_build_action` is defined and a PR modifies files that wouldn't
 #       necessarily trigger a model build, but `post_build_action` would be
 #       expected to. This JSON element is optional and can be removed if not
 #       needed.
-#   Line 177 - status_check: True to use this workflow as a Status Check. This
+#   Line 180 - status_check: True to use this workflow as a Status Check. This
 #     input is optional and defaults to `true` if undefined.
 #
 # Notes:
@@ -65,7 +65,8 @@ name: "" # Example: "Build Models"
 run-name: ${{ github.event_name == 'workflow_dispatch' && format('{0} - {1}', github.workflow, inputs.model) || '' }}
 
 on:
-  workflow_dispatch: # Manually trigger this workflow
+  # Manually trigger this workflow
+  workflow_dispatch:
     # Prompts shown when manually triggering this workflow
     inputs:
       model:
@@ -82,7 +83,9 @@ on:
         description: "True to commit the build files back into the branch."
         type: boolean
         default: false
+  # Run on PR open, reopen, synchronize, or when marked "ready for review" when the target is the defined branch
   pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
     branches:
       - "" # Example: "main"
   # Uncomment to enable scheduled builds
