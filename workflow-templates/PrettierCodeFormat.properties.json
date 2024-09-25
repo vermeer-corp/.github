@@ -1,5 +1,0 @@
-{
-  "name": "Prettier Code Format",
-  "description": "Run the opinionated code formatter Prettier on repository files, adding a default config if necessary.",
-  "categories": ["Automation"]
-}
