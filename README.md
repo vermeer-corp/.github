@@ -135,10 +135,6 @@ Set up and deploy a VME repository's MkDocs documentation to TLDR's TechDocs com
 
 Export a Simulink project to a format for distribution to other Simulink projects.
 
-#### Prettier Code Format
-
-Run the opinionated code formatter Prettier on repository files, adding a default config if necessary.
-
 #### Reload Model Parameters
 
 Reload parameters in one or more Simulink models defined in a repository.
