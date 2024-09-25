@@ -3,22 +3,22 @@
 #   properly in production:
 #   Line 32 - name: Workflow name which appears under "Workflows" in the repo's
 #     Actions tab.
-#   Line 44 - base_branch: Name of the default branch to compare changed files
+#   Line 45 - base_branch: Name of the default branch to compare changed files
 #     to.
-#   Line 48 - branches: Name of the default branch, or target branch(es) for
+#   Line 50 - branches: Name of the default branch, or target branch(es) for
 #     pull requests, for this repository.
-#   Line 58 - version: The version of MATLAB the models are saved in.
-#   Line 59 - project: The name of the MATLAB project to run tests for.
-#   Line 60 - required_labels: A list of runner labels required to run project
+#   Line 60 - version: The version of MATLAB the models are saved in.
+#   Line 61 - project: The name of the MATLAB project to run tests for.
+#   Line 62 - required_labels: A list of runner labels required to run project
 #     tests other than ["self-hosted", "Windows", "matlab"]. This property is
 #     not required and can be removed if the default labels are enough to run
 #     project tests.
-#   Line 61 - timeout_minutes: Maximum time a run tests job is allowed to run
+#   Line 63 - timeout_minutes: Maximum time a run tests job is allowed to run
 #     before the job gives up.
-#   Line 62 - run_cmd: Custom MATLAB command to run project tests. This input
+#   Line 64 - run_cmd: Custom MATLAB command to run project tests. This input
 #     element is optional and if undefined, the default eng-vme-actions MATLAB
 #     command to run project tests will be ran.
-#   Line 63 - status_check: True to use this workflow as a Status Check. This
+#   Line 65 - status_check: True to use this workflow as a Status Check. This
 #     input is optional and defaults to `true` if undefined.
 #
 # Notes:
@@ -31,7 +31,8 @@
 
 name: "" # Example: "Run Project Tests"
 on:
-  workflow_dispatch: # Manually trigger this workflow
+  # Manually trigger this workflow
+  workflow_dispatch:
     # Prompts shown when manually triggering this workflow
     inputs:
       test_all:
@@ -42,8 +43,9 @@ on:
         description: "If `test_all` is false, name of the branch to compare files to. Typically, this is the repository's default branch. If blank, this workflow will compare the HEAD commit of the branch being executed to the previous commit of the same branch."
         type: string
         default: "" # Example: "main"
-  # Run on PR open, reopen, or synchronize when the target is the defined branch
+  # Run on PR open, reopen, synchronize, or when marked "ready for review" when the target is the defined branch
   pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
     branches:
       - "" # Example: "main"
 
@@ -60,7 +62,7 @@ jobs:
       required_labels: "" # Example: "'qt', 'matlab-coder'"
       timeout_minutes: "" # Example: "15"
       run_cmd: "" # Example: "openProject(pwd); compile_cmds_runtests"
-      status_check: "" # Example: "false"
+      status_check: "" # Example: "true"
       test_all: ${{ inputs.test_all }}
       base_branch: ${{ inputs.base_branch }}
     secrets:

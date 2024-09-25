@@ -3,18 +3,18 @@
 #   properly in production:
 #   Line 27 - name: Workflow name which appears under "Workflows" in the repo's
 #     Actions tab.
-#   Line 48 - version: The version of MATLAB the library is saved in.
-#   Line 49 - project: The name of the MATLAB project for the library to build.
-#   Line 50 - required_labels: A list of runner labels required to build the
+#   Line 51 - version: The version of MATLAB the library is saved in.
+#   Line 52 - project: The name of the MATLAB project for the library to build.
+#   Line 53 - required_labels: A list of runner labels required to build the
 #     library other than ["self-hosted", "Windows", "matlab"]. This property is
 #     not required and can be removed if the default labels are enough to build
 #     the library.
-#   Line 51 - timeout_minutes: Maximum time a library build job is allowed to
+#   Line 54 - timeout_minutes: Maximum time a library build job is allowed to
 #     run before the job gives up.
-#   Line 52 - run_cmd: Custom MATLAB command to run to build a library. This
+#   Line 55 - run_cmd: Custom MATLAB command to run to build a library. This
 #     input element is optional and if undefined, the default eng-vme-actions
 #     MATLAB command to build a library will be ran.
-#   Line 53 - status_check: True to use this workflow as a Status Check. This
+#   Line 56 - status_check: True to use this workflow as a Status Check. This
 #     input is optional and defaults to `true` if undefined.
 #
 # Notes:
@@ -26,12 +26,15 @@
 
 name: "" # Example: "Build Library"
 on:
+  # Manually trigger this workflow
   workflow_dispatch:
+    # Prompts shown when manually triggering this workflow
     inputs:
       override_push:
         description: "Select this option to force push an output branch even when the source is not the default branch."
         type: boolean
         default: true
+  # Run when pushes are detected to branches except those defined below
   push:
     branches-ignore:
       - "**dist"
@@ -50,7 +53,7 @@ jobs:
       required_labels: "" # Example: "'qt', 'matlab-coder'"
       timeout_minutes: "" # Example: "15"
       run_cmd: "" # Example: "addpath(fullfile(pwd)); BuildLibrary('VME3_OS_Library');"
-      status_check: "" # Example: "false"
+      status_check: "" # Example: "true"
       override_push: ${{ inputs.override_push }}
     secrets:
       read_token: ${{ secrets.VPACKAGE_ACCESS_PRIV_KEY }}
