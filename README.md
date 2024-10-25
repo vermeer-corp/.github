@@ -127,6 +127,10 @@ Build one or more Simulink controller models defined in a repository.
 
 Create a distributable version of a Simulink library that can be imported as a submodule for Simulink projects.
 
+#### Delete Dist Branches
+
+Delete all dist branches prefixed with an inputted name.
+
 #### Deploy to TechDocs
 
 Set up and deploy a VME repository's MkDocs documentation to TLDR's TechDocs component.
@@ -142,5 +146,9 @@ Reload parameters in one or more Simulink models defined in a repository.
 #### Run Simulink Project Tests
 
 Run `Vermeer_Test_Tools` unit tests defined in a Simulink project.
+
+#### Update Project Models
+
+Update Simulink models in a given MATLAB project.
 
 ---
