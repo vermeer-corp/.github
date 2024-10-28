@@ -1,0 +1,34 @@
+# To use:
+# The following needs to be configured for this starter workflow to work
+#   properly in production:
+#   Line 17 - name: Workflow name which appears under "Workflows" in the repo's
+#     Actions tab.
+#   Line 24 - name: Job name which appears under the workflow.
+#
+# Notes:
+# 1. Ensure "Automatically delete head branches" is enabled in the repository's
+#   "General -> Pull Requests" settings.
+# 2. Save this file in a ".github/workflows" directory in the root of the
+#   repository.
+# 3. Make sure to change this file extension to yml and give it a good name.
+# 4. Refer to https://docs.github.com/en/actions/learn-github-actions for more
+#   information about GitHub Actions.
+
+name: "" # Example: "Delete Dist Branches"
+on:
+  # Run when a branch or tag deletion is detected
+  delete:
+
+jobs:
+  DeleteDistBranches:
+    name: "" # Example: "Delete Dist Branches"
+    if: ${{ github.ref_type == 'branch' }}
+    runs-on: [self-hosted, Linux, ubuntu]
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.event.ref }}
+      cancel-in-progress: true
+    steps:
+      - name: Delete dist branches composite
+        uses: vermeer-corp/eng-vme-actions/DeleteDistBranches@v5
+        with:
+          branch_name_prefix: ${{ github.event.ref }}

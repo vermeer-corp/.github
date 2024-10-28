@@ -8,16 +8,16 @@
 #   Line 50 - branches: Name of the default branch, or target branch(es) for
 #     pull requests, for this repository.
 #   Line 60 - version: The version of MATLAB the models are saved in.
-#   Line 61 - project: The name of the MATLAB project to run tests for.
-#   Line 62 - required_labels: A list of runner labels required to run project
-#     tests other than ["self-hosted", "Windows", "matlab"]. This property is
-#     not required and can be removed if the default labels are enough to run
-#     project tests.
-#   Line 63 - timeout_minutes: Maximum time a run tests job is allowed to run
-#     before the job gives up.
-#   Line 64 - run_cmd: Custom MATLAB command to run project tests. This input
-#     element is optional and if undefined, the default eng-vme-actions MATLAB
-#     command to run project tests will be ran.
+#   Line 61 - project: Name of MATLAB project to update models for.
+#   Line 62 - required_labels: A list of runner labels required to update
+#     project models other than ["self-hosted", "Windows", "matlab"]. This
+#     property is not required and can be removed if the default labels are
+#     enough to update project models.
+#   Line 63 - timeout_minutes: Maximum time an update project models job is
+#     allowed to run before the job gives up.
+#   Line 64 - run_cmd: Custom MATLAB command to update project models. This
+#     input element is optional and if undefined, the default eng-vme-actions
+#     MATLAB command to update project models will be ran.
 #   Line 65 - status_check: True to use this workflow as a Status Check. This
 #     input is optional and defaults to `true` if undefined.
 #
@@ -29,18 +29,18 @@
 # 4. Refer to https://docs.github.com/en/actions/learn-github-actions for more
 #   information.
 
-name: "" # Example: "Run Project Tests"
+name: "" # Example: "Update Project Models"
 on:
   # Manually trigger this workflow
   workflow_dispatch:
     # Prompts shown when manually triggering this workflow
     inputs:
-      test_all:
-        description: "Run all tests regardless of files changed."
+      update_all:
+        description: "Update all models regardless of files changed."
         type: boolean
         default: true
       base_branch:
-        description: "If `test_all` is false, name of the branch to compare files to. Typically, this is the repository's default branch. If blank, this workflow will compare the HEAD commit of the branch being executed to the previous commit of the same branch. This input is ignored if `test_all` is true."
+        description: "If `update_all` is false, name of the branch to compare files to. Typically, this is the repository's default branch. If blank, this workflow will compare the HEAD commit of the branch being executed to the previous commit of the same branch. This input is ignored if `update_all` is true."
         type: string
         default: "" # Example: "main"
   # Run on PR open, reopen, synchronize, or when marked "ready for review" when the target is the defined branch
@@ -50,20 +50,20 @@ on:
       - "" # Example: "main"
 
 jobs:
-  RunProjectTests:
-    name: Run Project Tests
+  UpdateProjectModels:
+    name: Update Project Models
     concurrency:
       group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
       cancel-in-progress: true
-    uses: vermeer-corp/eng-vme-actions/.github/workflows/run_project_tests_reusable.yml@v5
+    uses: vermeer-corp/eng-vme-actions/.github/workflows/update_project_models_reusable.yml@v5
     with:
       version: "" # Example: "2023a"
-      project: "" # Example: "CTX_Software.prj" or "CTX_Software"
-      required_labels: "" # Example: "'qt', 'matlab-coder'"
+      project: "" # Example: "Vermeer_HDD_Software.prj" or "Vermeer_HDD_Software"
+      required_labels: "" # Example: "'matlab-simulinktest', 'matlab-coder'"
       timeout_minutes: "" # Example: "15"
-      run_cmd: "" # Example: "openProject(pwd); compile_cmds_runtests"
+      run_cmd: "" # Example: "openProject(pwd); UpdateProjectModelsCustom();"
       status_check: "" # Example: "true"
-      test_all: ${{ inputs.test_all }}
+      update_all: ${{ inputs.update_all }}
       base_branch: ${{ inputs.base_branch }}
     secrets:
       read_token: ${{ secrets.VPACKAGE_ACCESS_PRIV_KEY }}
