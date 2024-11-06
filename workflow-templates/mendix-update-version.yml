@@ -19,7 +19,7 @@ jobs:
       - name: Support longpaths
         run: git config --global core.longpaths true
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.push.head.ref }}
 
@@ -57,7 +57,7 @@ jobs:
       - name: Support longpaths
         run: git config --global core.longpaths true
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         name: Checkout Main
         with:
           ref: main
@@ -74,7 +74,7 @@ jobs:
         run: echo "version=$(Get-Content .\VERSION.txt)" >> $env:GITHUB_OUTPUT
         shell: pwsh
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         name: Checkout Test
         with:
           ref: test
@@ -91,7 +91,7 @@ jobs:
         run: echo "version=$(Get-Content .\VERSION.txt)" >> $env:GITHUB_OUTPUT
         shell: pwsh
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         name: Checkout Development
         with:
           ref: ${{ github.event.pull_request.head.ref }}
@@ -135,7 +135,7 @@ jobs:
       - name: Support longpaths
         run: git config --global core.longpaths true
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.push.head.ref }}
 
