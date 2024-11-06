@@ -64,7 +64,7 @@ jobs:
 
       - name: Check Main Version existence
         id: check_main
-        uses: andstor/file-existence-action@v1
+        uses: andstor/file-existence-action@v3
         with:
           files: "./VERSION.txt"
 
@@ -81,7 +81,7 @@ jobs:
 
       - name: Check Test Version existence
         id: check_test
-        uses: andstor/file-existence-action@v1
+        uses: andstor/file-existence-action@v3
         with:
           files: "./VERSION.txt"
 
@@ -98,7 +98,7 @@ jobs:
 
       - name: Check Development Version existence
         id: check_development
-        uses: andstor/file-existence-action@v1
+        uses: andstor/file-existence-action@v3
         with:
           files: "./VERSION.txt"
 
