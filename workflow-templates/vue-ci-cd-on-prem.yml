@@ -51,7 +51,7 @@ jobs:
         #   VUE_APP_GOOGLE_MAPS_KEY: ${{ secrets.VUE_APP_GOOGLE_MAPS_KEY }}
         if: ${{ success() }}
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: publish-package
           # Update the path below to match the path of the build output if needed.
