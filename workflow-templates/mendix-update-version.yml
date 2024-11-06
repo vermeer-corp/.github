@@ -28,7 +28,7 @@ jobs:
         run: echo "version=$(Get-Content .\VERSION.txt)" >> $env:GITHUB_OUTPUT
         shell: pwsh
 
-      - uses: cardinalby/git-get-release-action@1.2.2
+      - uses: cardinalby/git-get-release-action@1.2.5
         name: Search for release
         id: find_release
         env:
@@ -145,7 +145,7 @@ jobs:
         shell: pwsh
         
       - name: Update release
-        uses: mini-bomba/create-github-release@v1.1.2
+        uses: mini-bomba/create-github-release@v1.2.0
         id: update-release
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
