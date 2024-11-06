@@ -33,7 +33,7 @@ jobs:
     environment: ${{ inputs.deploy-environment }}
     steps:
       - name: Download a single artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: publish-package
           path: publish-package

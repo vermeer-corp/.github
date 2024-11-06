@@ -95,14 +95,14 @@ jobs:
 
       - name: Upload Model Options Artifact
         if: ${{ (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && success() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: modelOptions.${{steps.commit.outputs.commit-id}}
           path: "./modelOptions.json"
 
       - name: Upload MDA Artifact
         if: ${{ (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && success() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{inputs.package-name}}_${{steps.version.outputs.version}}.${{steps.commit.outputs.commit-id}}
           path: "./release/${{inputs.mpr}}-${{steps.version.outputs.version}}.mda"
@@ -115,12 +115,12 @@ jobs:
     if: ${{ (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && success() }}
     steps:
       - name: Download MDA Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: ${{inputs.package-name}}_${{needs.build.outputs.current-version}}.${{needs.build.outputs.commit-id}}
 
       - name: Download Model Options Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: modelOptions.${{needs.build.outputs.commit-id}}
 
