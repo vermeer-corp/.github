@@ -39,7 +39,7 @@ jobs:
 
       - name: Release does not exist
         if: ${{steps.find_release.outputs.name != '' }}
-        uses: actions/github-script@v3
+        uses: actions/github-script@v7
         with:
           script: |
               core.setFailed('The release "${{steps.check_version.outputs.version}}" already exists.')
