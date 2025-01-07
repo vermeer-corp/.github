@@ -181,6 +181,4 @@ jobs:
       model: ${{ inputs.model }}
       upload_codegen: ${{ inputs.upload_codegen }}
       push_build: ${{ inputs.push_build }}
-    secrets:
-      read_token: ${{ secrets.VPACKAGE_ACCESS_PRIV_KEY }}
-      write_token: ${{ secrets.GITHUB_TOKEN }}
+    secrets: inherit

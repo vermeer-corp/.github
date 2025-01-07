@@ -55,6 +55,4 @@ jobs:
       run_cmd: "" # Example: "addpath(fullfile(pwd)); BuildLibrary('VME3_OS_Library');"
       status_check: "" # Example: "true"
       override_push: ${{ inputs.override_push }}
-    secrets:
-      read_token: ${{ secrets.VPACKAGE_ACCESS_PRIV_KEY }}
-      write_token: ${{ secrets.GITHUB_TOKEN }}
+    secrets: inherit

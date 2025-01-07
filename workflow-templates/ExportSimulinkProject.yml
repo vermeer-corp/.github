@@ -68,6 +68,4 @@ jobs:
       status_check: "" # Example: "true"
       export_profile: ${{ inputs.export_profile || '' }} # Example: 'dist'
       override_push: ${{ inputs.override_push }}
-    secrets:
-      read_token: ${{ secrets.VPACKAGE_ACCESS_PRIV_KEY }}
-      write_token: ${{ secrets.GITHUB_TOKEN }}
+    secrets: inherit

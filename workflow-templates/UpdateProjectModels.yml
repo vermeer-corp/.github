@@ -65,5 +65,4 @@ jobs:
       status_check: "" # Example: "true"
       update_all: ${{ inputs.update_all }}
       base_branch: ${{ inputs.base_branch }}
-    secrets:
-      read_token: ${{ secrets.VPACKAGE_ACCESS_PRIV_KEY }}
+    secrets: inherit

@@ -43,6 +43,4 @@ jobs:
       project: "" # Example: "Vermeer_PD_Features.prj" or "Vermeer_PD_Features"
       models: "" # Example: "OCU" or "ACUParameters_MT.slx, ODUParams_MT.slx, PCUParams_MT.slx"
       timeout_minutes: "" # Example: "15"
-    secrets:
-      read_token: ${{ secrets.VPACKAGE_ACCESS_PRIV_KEY }}
-      write_token: ${{ secrets.GITHUB_TOKEN }}
+    secrets: inherit
