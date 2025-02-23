@@ -5,20 +5,20 @@
 #     Actions tab.
 #   Line 45 - base_branch: Name of the default branch to compare changed files
 #     to.
-#   Line 50 - branches: Name of the default branch, or target branch(es) for
+#   Line 51 - branches: Name of the default branch, or target branch(es) for
 #     pull requests, for this repository.
-#   Line 60 - version: The version of MATLAB the models are saved in.
-#   Line 61 - project: Name of MATLAB project to update models for.
-#   Line 62 - required_labels: A list of runner labels required to update
+#   Line 62 - version: The version of MATLAB the models are saved in.
+#   Line 63 - project: Name of MATLAB project to update models for.
+#   Line 64 - required_labels: A list of runner labels required to update
 #     project models other than ["self-hosted", "Windows", "matlab"]. This
 #     property is not required and can be removed if the default labels are
 #     enough to update project models.
-#   Line 63 - timeout_minutes: Maximum time an update project models job is
+#   Line 65 - timeout_minutes: Maximum time an update project models job is
 #     allowed to run before the job gives up.
-#   Line 64 - run_cmd: Custom MATLAB command to update project models. This
+#   Line 66 - run_cmd: Custom MATLAB command to update project models. This
 #     input element is optional and if undefined, the default eng-vme-actions
 #     MATLAB command to update project models will be ran.
-#   Line 65 - status_check: True to use this workflow as a Status Check. This
+#   Line 67 - status_check: True to use this workflow as a Status Check. This
 #     input is optional and defaults to `true` if undefined.
 #
 # Notes:
@@ -43,7 +43,8 @@ on:
         description: "If `update_all` is false, name of the branch to compare files to. Typically, this is the repository's default branch. If blank, this workflow will compare the HEAD commit of the branch being executed to the previous commit of the same branch. This input is ignored if `update_all` is true."
         type: string
         default: "" # Example: "main"
-  # Run on PR open, reopen, synchronize, or when marked "ready for review" when the target is the defined branch
+  # Run on PR open, reopen, synchronize, or when marked "ready for review" when
+  # the target is the defined branch(es)
   pull_request:
     types: [opened, reopened, synchronize, ready_for_review]
     branches:
@@ -56,13 +57,13 @@ jobs:
       group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
       cancel-in-progress: true
     uses: vermeer-corp/eng-vme-actions/.github/workflows/update_project_models_reusable.yml@v5
+    secrets: inherit
     with:
       version: "" # Example: "2023a"
       project: "" # Example: "Vermeer_HDD_Software.prj" or "Vermeer_HDD_Software"
-      required_labels: "" # Example: "'matlab-simulinktest', 'matlab-coder'"
+      required_labels: "" # Example: "matlab-simulinktest, matlab-coder"
       timeout_minutes: "" # Example: "15"
       run_cmd: "" # Example: "openProject(pwd); UpdateProjectModelsCustom();"
       status_check: "" # Example: "true"
       update_all: ${{ inputs.update_all }}
       base_branch: ${{ inputs.base_branch }}
-    secrets: inherit

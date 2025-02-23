@@ -3,23 +3,23 @@
 #   properly in production:
 #   Line 35 - name: Workflow name which appears under "Workflows" in the repo's
 #     Actions tab.
-#   Line 62 - version: The version of MATLAB the project is saved in.
-#   Line 63 - root_project: The name of the MATLAB project containing the
+#   Line 63 - version: The version of MATLAB the project is saved in.
+#   Line 64 - root_project: The name of the MATLAB project containing the
 #     project to export.
-#   Line 64 - export_project: Name of the MATLAB sub-project of `root_project`
+#   Line 65 - export_project: Name of the MATLAB sub-project of `root_project`
 #     to export.
-#   Line 65 - required_labels: A list of runner labels required to export the
+#   Line 66 - required_labels: A list of runner labels required to export the
 #     project other than ["self-hosted", "Windows", "matlab"]. This property is
 #     not required and can be removed if the default labels are enough to export
 #     the project.
-#   Line 66 - timeout_minutes: Maximum time a project export job is allowed to
+#   Line 67 - timeout_minutes: Maximum time a project export job is allowed to
 #     run before the job gives up. Defaults to `10` if undefined.
-#   Line 67 - run_cmd: Custom MATLAB command to run to export a Simulink
+#   Line 68 - run_cmd: Custom MATLAB command to run to export a Simulink
 #     project. This input element is optional and if undefined, the default
 #     eng-vme-actions MATLAB command to export a MATLAB project will be ran.
-#   Line 68 - status_check: True to use this workflow as a Status Check. This
+#   Line 69 - status_check: True to use this workflow as a Status Check. This
 #     input is optional and defaults to `true` if undefined.
-#   Line 69: export_profile: Default name of the profile to export the project
+#   Line 70: export_profile: Default name of the profile to export the project
 #     with. See
 #     https://www.mathworks.com/help/matlab/ref/matlab.project.project.export.html#mw_4da5d920-ce4a-4e92-bdb8-65485c22c9bb.
 #
@@ -58,14 +58,14 @@ jobs:
       group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
       cancel-in-progress: true
     uses: vermeer-corp/eng-vme-actions/.github/workflows/export_simulink_project_reusable.yml@v5
+    secrets: inherit
     with:
       version: "" # Example: "2023a"
       root_project: "" # Example: "eng_vme2_maintenancereminder_library" or "./eng_vme2_maintenancereminder_library.prj"
       export_project: "" # Example: "Vermeer_MaintenanceReminder_Library" or "Source/Vermeer_MaintenanceReminder_Library.prj"
-      required_labels: "" # Example: "'qt', 'matlab-coder'"
+      required_labels: "" # Example: "qt, matlab-coder"
       timeout_minutes: "" # Example: "15"
       run_cmd: "" # Example: "addpath(fullfile(pwd)); ExportSimulinkProject('VME3_OS_Library');"
       status_check: "" # Example: "true"
       export_profile: ${{ inputs.export_profile || '' }} # Example: 'dist'
       override_push: ${{ inputs.override_push }}
-    secrets: inherit
