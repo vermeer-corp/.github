@@ -35,7 +35,7 @@ jobs:
         with:
           # Adjust if a different node version is needed
           # See https://github.com/marketplace/actions/setup-node-js-environment for options
-          node-version: "16.x"
+          node-version: "22.x"
           cache: "npm"
       - name: Install dependencies
         run: npm ci
