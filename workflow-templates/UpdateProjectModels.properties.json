@@ -1,0 +1,5 @@
+{
+  "name": "Update Simulink Project Models",
+  "description": "Update Simulink models in a given MATLAB project.",
+  "categories": ["Automation", "continuous-integration", "deployment", "MATLAB"]
+}

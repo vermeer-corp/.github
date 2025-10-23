@@ -1,0 +1,37 @@
+# To use:
+# The following needs to be configured for this starter workflow to work
+#   properly in production:
+#   Line 22 - name: Workflow name which appears under "Workflows" in the repo's
+#     Actions tab.
+#   Line 30 - branches: Name of the base branch for PRs that will trigger this
+#     workflow. Normally this is just the default branch, but more can be
+#     defined.
+#
+# Notes:
+# 1. Save this file in a ".github/workflows" directory in the root of the
+#   repository.
+# 2. Make sure to change this file extension to yml and give it a good name.
+# 3. This workflow requires that the repository has git submodules configured.
+# 4. The VPACKAGE_ACCESS_PRIV_KEY secret must be configured in the repository
+#   to provide access to submodule repositories.
+# 5. Refer to https://docs.github.com/en/actions/learn-github-actions for more
+#   information about GitHub Actions.
+
+name: "" # Example: "Validate Submodule Branches"
+on:
+  # Manually trigger this workflow
+  workflow_dispatch:
+  # Run on PR open, reopen, synchronize, or when marked "ready for review" when
+  # the target branch is one of the branches defined below
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+    branches: "" # Example: "main"
+
+jobs:
+  ValidateSubmoduleBranch:
+    name: "Validate Submodule Branch"
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+      cancel-in-progress: true
+    uses: vermeer-corp/eng-vme-actions/.github/workflows/validate_submodule_branch_reusable.yml@v5
+    secrets: inherit

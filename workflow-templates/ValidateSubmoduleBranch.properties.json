@@ -1,0 +1,10 @@
+{
+  "name": "Validate Submodule Branch",
+  "description": "Validate that all git submodules are on either the 'dist' or 'main' branches to ensure stable dependencies.",
+  "categories": [
+    "Automation",
+    "continuous-integration",
+    "validation",
+    "git-submodules"
+  ]
+}
