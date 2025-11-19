@@ -29,9 +29,9 @@ jobs:
     runs-on: ubuntu-latest
     environment: $PUBLISH_ENVIRONMENT$
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
       - name: Use Node.js 16.x
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           # Adjust if a different node version is needed
           # See https://github.com/marketplace/actions/setup-node-js-environment for options
@@ -51,7 +51,7 @@ jobs:
         #   VUE_APP_GOOGLE_MAPS_KEY: ${{ secrets.VUE_APP_GOOGLE_MAPS_KEY }}
         if: ${{ success() }}
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: publish-package
           # Update the path below to match the path of the build output if needed.
