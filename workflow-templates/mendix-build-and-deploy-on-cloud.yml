@@ -43,7 +43,7 @@ jobs:
       current-version: ${{steps.version.outputs.version}}
     steps:
       - name: Set up Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4
         with:
           java-version: 11
 
@@ -56,7 +56,7 @@ jobs:
       - name: Support longpaths
         run: git config --global core.longpaths true
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
       - name: Read Current Version
         id: version
@@ -80,7 +80,7 @@ jobs:
         run: echo "commit-id=$((get-content .\.git\FETCH_HEAD).substring(0,7))" >> $env:GITHUB_OUTPUT
         shell: pwsh
 
-      - uses: bluwy/substitute-string-action@v3
+      - uses: bluwy/substitute-string-action@70ff0b17357670ffd3fee68e95b6de9963b66bad # v3
         name: Substitute Model Options Variables
         with:
           _input-file: './modelOptions.json'
@@ -95,14 +95,14 @@ jobs:
 
       - name: Upload Model Options Artifact
         if: ${{ (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && success() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: modelOptions.${{steps.commit.outputs.commit-id}}
           path: "./modelOptions.json"
 
       - name: Upload MDA Artifact
         if: ${{ (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && success() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: ${{inputs.package-name}}_${{steps.version.outputs.version}}.${{steps.commit.outputs.commit-id}}
           path: "./release/${{inputs.mpr}}-${{steps.version.outputs.version}}.mda"
@@ -115,12 +115,12 @@ jobs:
     if: ${{ (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && success() }}
     steps:
       - name: Download MDA Artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
           name: ${{inputs.package-name}}_${{needs.build.outputs.current-version}}.${{needs.build.outputs.commit-id}}
 
       - name: Download Model Options Artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
           name: modelOptions.${{needs.build.outputs.commit-id}}
 

@@ -19,7 +19,7 @@ jobs:
       - name: Support longpaths
         run: git config --global core.longpaths true
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
           ref: ${{ github.event.push.head.ref }}
 
@@ -28,7 +28,7 @@ jobs:
         run: echo "version=$(Get-Content .\VERSION.txt)" >> $env:GITHUB_OUTPUT
         shell: pwsh
 
-      - uses: cardinalby/git-get-release-action@1.2.5
+      - uses: cardinalby/git-get-release-action@5172c3a026600b1d459b117738c605fabc9e4e44 # 1.2.5
         name: Search for release
         id: find_release
         env:
@@ -39,7 +39,7 @@ jobs:
 
       - name: Release does not exist
         if: ${{steps.find_release.outputs.name != '' }}
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
         with:
           script: |
               core.setFailed('The release "${{steps.check_version.outputs.version}}" already exists.')
@@ -57,14 +57,14 @@ jobs:
       - name: Support longpaths
         run: git config --global core.longpaths true
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         name: Checkout Main
         with:
           ref: main
 
       - name: Check Main Version existence
         id: check_main
-        uses: andstor/file-existence-action@v3
+        uses: andstor/file-existence-action@076e0072799f4942c8bc574a82233e1e4d13e9d6 # v3
         with:
           files: "./VERSION.txt"
 
@@ -74,14 +74,14 @@ jobs:
         run: echo "version=$(Get-Content .\VERSION.txt)" >> $env:GITHUB_OUTPUT
         shell: pwsh
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         name: Checkout Test
         with:
           ref: test
 
       - name: Check Test Version existence
         id: check_test
-        uses: andstor/file-existence-action@v3
+        uses: andstor/file-existence-action@076e0072799f4942c8bc574a82233e1e4d13e9d6 # v3
         with:
           files: "./VERSION.txt"
 
@@ -91,14 +91,14 @@ jobs:
         run: echo "version=$(Get-Content .\VERSION.txt)" >> $env:GITHUB_OUTPUT
         shell: pwsh
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         name: Checkout Development
         with:
           ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Check Development Version existence
         id: check_development
-        uses: andstor/file-existence-action@v3
+        uses: andstor/file-existence-action@076e0072799f4942c8bc574a82233e1e4d13e9d6 # v3
         with:
           files: "./VERSION.txt"
 
@@ -135,7 +135,7 @@ jobs:
       - name: Support longpaths
         run: git config --global core.longpaths true
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
           ref: ${{ github.event.push.head.ref }}
 
@@ -145,7 +145,7 @@ jobs:
         shell: pwsh
         
       - name: Update release
-        uses: mini-bomba/create-github-release@v1.2.0
+        uses: mini-bomba/create-github-release@45cafce00df95e2a4021ca26da22212eea396e74 # v1.2.0
         id: update-release
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
