@@ -115,12 +115,12 @@ jobs:
     if: ${{ (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && success() }}
     steps:
       - name: Download MDA Artifact
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6
         with:
           name: ${{inputs.package-name}}_${{needs.build.outputs.current-version}}.${{needs.build.outputs.commit-id}}
 
       - name: Download Model Options Artifact
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6
         with:
           name: modelOptions.${{needs.build.outputs.commit-id}}
 
