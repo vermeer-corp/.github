@@ -5,11 +5,11 @@
 #     Actions tab.
 #   Line 32 - paths: Set the paths for which changes trigger this workflow. More
 #     paths can be added.
-#   Line 42 - version: Version of MATLAB to use.
-#   Line 43 - project: Name of the project the models are in.
-#   Line 44 - models: A comma-separated list of model names to reload parameters
+#   Line 43 - version: Version of MATLAB to use.
+#   Line 44 - project: Name of the project the models are in.
+#   Line 45 - models: A comma-separated list of model names to reload parameters
 #     for.
-#   Line 45 - timeout_minutes: Maximum time a project export job is allowed to run
+#   Line 46 - timeout_minutes: Maximum time a project export job is allowed to run
 #     before the job gives up. Defaults to `20` if undefined.
 #
 # Notes:
@@ -38,11 +38,9 @@ jobs:
       group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
       cancel-in-progress: true
     uses: vermeer-corp/eng-vme-actions/.github/workflows/reload_model_parameters_reusable.yml@v5
+    secrets: inherit
     with:
       version: "" # Example: "2021b"
       project: "" # Example: "Vermeer_PD_Features.prj" or "Vermeer_PD_Features"
       models: "" # Example: "OCU" or "ACUParameters_MT.slx, ODUParams_MT.slx, PCUParams_MT.slx"
       timeout_minutes: "" # Example: "15"
-    secrets:
-      read_token: ${{ secrets.VPACKAGE_ACCESS_PRIV_KEY }}
-      write_token: ${{ secrets.GITHUB_TOKEN }}

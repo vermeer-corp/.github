@@ -1,0 +1,75 @@
+# To use:
+# The following needs to be configured for this starter workflow to work
+#   properly in production:
+#   Line 36 - name: Workflow name which appears under "Workflows" in the repo's
+#     Actions tab.
+#   Line 49 - base_branch: Name of the default branch to compare changed files
+#     to.
+#   Line 55 - branches: Name of the default branch, or target branch(es) for
+#     pull requests, for this repository.
+#   Line 66 - version: The version of MATLAB the models are saved in.
+#   Line 67 - project: Name of MATLAB project to update models for.
+#   Line 68 - exclude_filter: Regex to filter models to update. Models whose
+#     names match this regex will NOT be updated.
+#   Line 69 - include_filter: Regex to filter models to update. Models whose
+#     names match this regex WILL be updated.
+#   Line 70 - required_labels: A list of runner labels required to update
+#     project models other than ["self-hosted", "Windows", "matlab"]. This
+#     property is not required and can be removed if the default labels are
+#     enough to update project models.
+#   Line 71 - timeout_minutes: Maximum time an update project models job is
+#     allowed to run before the job gives up.
+#   Line 72 - run_cmd: Custom MATLAB command to update project models. This
+#     input element is optional and if undefined, the default eng-vme-actions
+#     MATLAB command to update project models will be ran.
+#   Line 73 - status_check: True to use this workflow as a Status Check. This
+#     input is optional and defaults to `true` if undefined.
+#
+# Notes:
+# 1. Save this file in a ".github/workflows" directory in the root of the
+#   repository.
+# 2. Make sure to change this file extension to "yml" and give it a good name.
+# 3. All defined paths are relative to the root of the repository.
+# 4. Refer to https://docs.github.com/en/actions/learn-github-actions for more
+#   information.
+
+name: "" # Example: "Update Project Models"
+on:
+  # Manually trigger this workflow
+  workflow_dispatch:
+    # Prompts shown when manually triggering this workflow
+    inputs:
+      update_all:
+        description: "Update all models regardless of files changed."
+        type: boolean
+        default: true
+      base_branch:
+        description: "If `update_all` is false, name of the branch to compare files to. Typically, this is the repository's default branch. If blank, this workflow will compare the HEAD commit of the branch being executed to the previous commit of the same branch. This input is ignored if `update_all` is true."
+        type: string
+        default: "" # Example: "main"
+  # Run on PR open, reopen, synchronize, or when marked "ready for review" when
+  # the target is the defined branch(es)
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+    branches:
+      - "" # Example: "main"
+
+jobs:
+  UpdateProjectModels:
+    name: Update Project Models
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+      cancel-in-progress: true
+    uses: vermeer-corp/eng-vme-actions/.github/workflows/update_project_models_reusable.yml@v5
+    secrets: inherit
+    with:
+      version: "" # Example: "2023a"
+      project: "" # Example: "Vermeer_HDD_Software.prj" or "Vermeer_HDD_Software"
+      exclude_filter: "" # Example: "Harness$" # Don't update models whose names end in "Harness"
+      include_filter: "" # Example: "Dashboard$" # Only update models whose names end in "Dashboard"
+      required_labels: "" # Example: "matlab-simulinktest, matlab-coder"
+      timeout_minutes: "" # Example: "15"
+      run_cmd: "" # Example: "openProject(pwd); UpdateProjectModelsCustom();"
+      status_check: "" # Example: "true"
+      update_all: ${{ inputs.update_all }}
+      base_branch: ${{ inputs.base_branch }}
