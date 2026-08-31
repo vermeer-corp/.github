@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           fetch-depth: 0
-      - uses: sonarsource/sonarqube-scan-action@master
+      - uses: sonarsource/sonarqube-scan-action@5bc5285b684b9f0e940031dc8ddc4b6387a2f493 # master
         env:
           # These secrets are already set at the organization level and do not need to be configured by you
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
